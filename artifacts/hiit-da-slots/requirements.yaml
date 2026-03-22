@@ -1,0 +1,16 @@
+packages:
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility function to efficiently merge Tailwind CSS classes without style conflicts"
+
+images:
+  - path: "artifacts/hiit-da-slots/public/images/arcade-bg.png"
+    description: "Dark retro arcade grid background with subtle purple and blue neon grid lines fading into the distance, empty space in middle"
+    aspect_ratio: "16:9"
+  - path: "artifacts/hiit-da-slots/public/images/slot-machine.png"
+    description: "A neon glowing slot machine illustration, retro 80s outrun style, dark background, glowing pink and cyan"
+    aspect_ratio: "1:1"
+
+notes:
+  - Client-side only application
+  - No backend or database required
+  - Uses local JSON file for exercise database
