@@ -31,6 +31,15 @@ export default function WorkoutHistoryScreen({ onBack, onReplay }: Props) {
     [lib.history]
   );
 
+  const formatCompletedAt = (iso: string) =>
+    new Date(iso).toLocaleString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+
   return (
     <div className="flex flex-1 flex-col min-h-0 w-full max-w-2xl mx-auto px-4 py-8 pb-24">
       <div className="flex items-center gap-4 mb-8">
@@ -61,10 +70,10 @@ export default function WorkoutHistoryScreen({ onBack, onReplay }: Props) {
               key={entry.id}
               className="arcade-card rounded-xl p-4 border border-border/80"
             >
-              <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-                <div className="min-w-0 flex-1">
+              <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="order-2 flex min-w-0 flex-1 flex-col sm:order-1">
                   <input
-                    className="w-full bg-background/80 border border-border rounded px-2 py-1 font-display text-foreground mb-1"
+                    className="mb-1 w-full rounded border border-border bg-background/80 px-2 py-1 font-display text-foreground"
                     value={entry.title ?? ""}
                     onChange={(e) => {
                       updateHistoryMetadata(entry.id, {
@@ -74,20 +83,20 @@ export default function WorkoutHistoryScreen({ onBack, onReplay }: Props) {
                     }}
                     placeholder="Title"
                   />
-                  <p className="text-xs text-muted-foreground font-sans">
-                    {new Date(entry.completedAtIso).toLocaleString()}
+                  <p className="min-w-0 overflow-x-auto text-xs text-muted-foreground font-sans whitespace-nowrap">
+                    {formatCompletedAt(entry.completedAtIso)}
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="order-1 flex flex-shrink-0 flex-wrap items-center justify-end gap-1.5 sm:order-2 sm:gap-2">
                   <button
                     type="button"
                     onClick={() => {
                       playSound(SOUNDS.uiConfirm);
                       onReplay(entry);
                     }}
-                    className="arcade-btn-primary px-3 py-1.5 rounded-lg text-xs flex items-center gap-1"
+                    className="arcade-btn-primary flex items-center gap-0.5 rounded-lg px-2 py-1 text-[11px] leading-tight"
                   >
-                    <Play size={14} /> Replay
+                    <Play size={12} /> Replay
                   </button>
                   <button
                     type="button"
@@ -96,9 +105,9 @@ export default function WorkoutHistoryScreen({ onBack, onReplay }: Props) {
                       setSaveEntry(entry);
                       setSaveModalOpen(true);
                     }}
-                    className="px-3 py-1.5 rounded-lg text-xs border border-accent/50 text-accent flex items-center gap-1 hover:bg-accent/10"
+                    className="flex items-center gap-0.5 rounded-lg border border-accent/50 px-2 py-1 text-[11px] leading-tight text-accent hover:bg-accent/10"
                   >
-                    <BookmarkPlus size={14} /> Save as preset
+                    <BookmarkPlus size={12} /> Save as preset
                   </button>
                   <button
                     type="button"
@@ -107,10 +116,10 @@ export default function WorkoutHistoryScreen({ onBack, onReplay }: Props) {
                       removeHistoryEntry(entry.id);
                       refresh();
                     }}
-                    className="p-2 text-destructive/80 hover:text-destructive rounded-lg border border-destructive/30"
+                    className="rounded-lg border border-destructive/30 p-1.5 text-destructive/80 hover:text-destructive"
                     aria-label="Delete"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>
