@@ -1,0 +1,1516 @@
+{
+		"exercises": [
+		{
+				"exercise": "Air Squat",
+				"description": "Stand with feet about shoulder-width apart, sit your hips back and down, then stand back up with control.",
+				"muscles": "Quads; glutes; hamstrings; calves; core",
+				"reps": "15-25",
+				"interval": "30-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Air+Squat+exercise+demonstration"
+		},
+		{
+				"exercise": "Squat Pulse",
+				"description": "Lower into a squat and perform small controlled up-and-down pulses while staying low.",
+				"muscles": "Quads; glutes; hamstrings; core",
+				"reps": "15-30",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Squat+Pulse+exercise+demonstration"
+		},
+		{
+				"exercise": "Squat Hold",
+				"description": "Lower into a squat and hold the position with your chest up and knees tracking over your feet.",
+				"muscles": "Quads; glutes; hamstrings; core",
+				"reps": "hold",
+				"interval": "20-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Squat+Hold+exercise+demonstration"
+		},
+		{
+				"exercise": "Jump Squat",
+				"description": "Perform a squat, then explode upward into a jump and land softly before repeating.",
+				"muscles": "Quads; glutes; calves; core",
+				"reps": "8-15",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Jump+Squat+exercise+demonstration"
+		},
+		{
+				"exercise": "Sumo Squat",
+				"description": "Take a wider stance with toes turned slightly out, lower into a squat, and return to standing.",
+				"muscles": "Inner thighs; quads; glutes; hamstrings",
+				"reps": "12-20",
+				"interval": "30-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Sumo+Squat+exercise+demonstration"
+		},
+		{
+				"exercise": "Lateral Squat Walk",
+				"description": "Stay in a partial squat and step side to side while keeping tension in the legs.",
+				"muscles": "Glutes; quads; abductors; core",
+				"reps": "12-20/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Lateral+Squat+Walk+exercise+demonstration"
+		},
+		{
+				"exercise": "Forward Lunge",
+				"description": "Step forward, lower both knees, then push back to the starting position.",
+				"muscles": "Quads; glutes; hamstrings; calves",
+				"reps": "8-15/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Forward+Lunge+exercise+demonstration"
+		},
+		{
+				"exercise": "Reverse Lunge",
+				"description": "Step one leg back, lower into a lunge, then return to standing.",
+				"muscles": "Glutes; quads; hamstrings; core",
+				"reps": "8-15/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Reverse+Lunge+exercise+demonstration"
+		},
+		{
+				"exercise": "Alternating Lunge",
+				"description": "Alternate forward or reverse lunges from side to side in a steady rhythm.",
+				"muscles": "Glutes; quads; hamstrings; calves",
+				"reps": "16-30 total",
+				"interval": "20-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Alternating+Lunge+exercise+demonstration"
+		},
+		{
+				"exercise": "Lateral Lunge",
+				"description": "Step out to the side, sit into one hip, then push back to center.",
+				"muscles": "Glutes; quads; adductors; hamstrings",
+				"reps": "8-15/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Lateral+Lunge+exercise+demonstration"
+		},
+		{
+				"exercise": "Curtsy Lunge",
+				"description": "Step one leg diagonally behind the other, lower into a lunge, then return to standing.",
+				"muscles": "Glutes; quads; inner thighs; core",
+				"reps": "8-15/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Curtsy+Lunge+exercise+demonstration"
+		},
+		{
+				"exercise": "Walking Lunge",
+				"description": "Move forward one lunge at a time, alternating legs as you travel.",
+				"muscles": "Glutes; quads; hamstrings; calves",
+				"reps": "10-20/side",
+				"interval": "20-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Walking+Lunge+exercise+demonstration"
+		},
+		{
+				"exercise": "Split Squat",
+				"description": "Take a staggered stance, lower straight down, and rise without stepping between reps.",
+				"muscles": "Quads; glutes; hamstrings",
+				"reps": "8-15/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Split+Squat+exercise+demonstration"
+		},
+		{
+				"exercise": "Bulgarian Split Squat (bench optional)",
+				"description": "Place rear foot on a low surface if available, lower into a split squat, and rise back up.",
+				"muscles": "Quads; glutes; hamstrings; core",
+				"reps": "6-12/side",
+				"interval": "20-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Bulgarian+Split+Squat+exercise+demonstration"
+		},
+		{
+				"exercise": "Skater Hop",
+				"description": "Leap side to side from one foot to the other while swinging the opposite leg behind.",
+				"muscles": "Glutes; quads; calves; core",
+				"reps": "12-24 total",
+				"interval": "20-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Skater+Hop+exercise+demonstration"
+		},
+		{
+				"exercise": "Single-Leg Deadlift Reach",
+				"description": "Balance on one leg, hinge at the hips, reach toward the floor, and stand back up.",
+				"muscles": "Hamstrings; glutes; core; balance muscles",
+				"reps": "8-12/side",
+				"interval": "20-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Single-Leg+Deadlift+Reach+exercise+demonstration"
+		},
+		{
+				"exercise": "Calf Raise",
+				"description": "Rise onto the balls of your feet, pause, and lower with control.",
+				"muscles": "Calves; ankles",
+				"reps": "15-30",
+				"interval": "30-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Calf+Raise+exercise+demonstration"
+		},
+		{
+				"exercise": "Wall Sit",
+				"description": "Lean against a wall with knees bent and hold a seated position.",
+				"muscles": "Quads; glutes; hamstrings",
+				"reps": "hold",
+				"interval": "20-60 sec",
+				"demo": "https://www.youtube.com/results?search_query=Wall+Sit+exercise+demonstration"
+		},
+		{
+				"exercise": "Glute Bridge",
+				"description": "Lie on your back with knees bent, drive hips upward, then lower down.",
+				"muscles": "Glutes; hamstrings; core",
+				"reps": "12-25",
+				"interval": "30-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Glute+Bridge+exercise+demonstration"
+		},
+		{
+				"exercise": "Single-Leg Glute Bridge",
+				"description": "Perform a glute bridge while keeping one leg lifted off the floor.",
+				"muscles": "Glutes; hamstrings; core",
+				"reps": "8-15/side",
+				"interval": "20-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Single-Leg+Glute+Bridge+exercise+demonstration"
+		},
+		{
+				"exercise": "Hip Thrust (floor)",
+				"description": "With upper back supported on the floor, squeeze glutes to lift hips up and down.",
+				"muscles": "Glutes; hamstrings; core",
+				"reps": "12-20",
+				"interval": "30-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hip+Thrust+floor+exercise+demonstration"
+		},
+		{
+				"exercise": "Donkey Kick",
+				"description": "From hands and knees, drive one heel upward while keeping the knee bent.",
+				"muscles": "Glutes; hamstrings; core",
+				"reps": "12-20/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Donkey+Kick+exercise+demonstration"
+		},
+		{
+				"exercise": "Fire Hydrant",
+				"description": "From hands and knees, lift one knee out to the side and lower it back down.",
+				"muscles": "Glute medius; hips; core",
+				"reps": "12-20/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Fire+Hydrant+exercise+demonstration"
+		},
+		{
+				"exercise": "Frog Pump",
+				"description": "Lie on your back with soles of feet together, knees out, and thrust hips upward.",
+				"muscles": "Glutes; inner thighs",
+				"reps": "20-30",
+				"interval": "30-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Frog+Pump+exercise+demonstration"
+		},
+		{
+				"exercise": "Push-Up",
+				"description": "From a plank, lower your chest toward the floor and press back up.",
+				"muscles": "Chest; shoulders; triceps; core",
+				"reps": "8-20",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Knee Push-Up",
+				"description": "Perform a push-up from the knees while keeping the body in a straight line from head to knees.",
+				"muscles": "Chest; shoulders; triceps; core",
+				"reps": "10-20",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Knee+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Incline Push-Up",
+				"description": "Place hands on an elevated surface, lower your chest, and press back up.",
+				"muscles": "Chest; shoulders; triceps",
+				"reps": "10-20",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Incline+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Decline Push-Up",
+				"description": "Place feet on an elevated surface, lower your chest, and press back up.",
+				"muscles": "Upper chest; shoulders; triceps; core",
+				"reps": "6-15",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Decline+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Wide Push-Up",
+				"description": "Set hands wider than shoulder-width and perform a push-up.",
+				"muscles": "Chest; shoulders; triceps",
+				"reps": "8-18",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Wide+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Diamond Push-Up",
+				"description": "Place hands close together under the chest and perform a push-up.",
+				"muscles": "Triceps; chest; shoulders",
+				"reps": "5-12",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Diamond+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Pike Push-Up",
+				"description": "Start with hips lifted high, lower head toward the floor, then press back up.",
+				"muscles": "Shoulders; triceps; upper chest",
+				"reps": "6-12",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Pike+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Plank Up-Down",
+				"description": "Alternate between forearm plank and high plank while keeping hips steady.",
+				"muscles": "Shoulders; chest; triceps; core",
+				"reps": "10-20 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Plank+Up-Down+exercise+demonstration"
+		},
+		{
+				"exercise": "Bear Crawl",
+				"description": "Move forward on hands and feet with knees hovering close to the floor.",
+				"muscles": "Shoulders; chest; legs; core",
+				"reps": "10-20 steps",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Bear+Crawl+exercise+demonstration"
+		},
+		{
+				"exercise": "Crab Walk",
+				"description": "Face upward, lift hips, and walk on hands and feet.",
+				"muscles": "Shoulders; triceps; glutes; core",
+				"reps": "10-20 steps",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Crab+Walk+exercise+demonstration"
+		},
+		{
+				"exercise": "Mountain Climber",
+				"description": "From a plank, rapidly drive knees toward the chest one at a time.",
+				"muscles": "Core; shoulders; hip flexors; chest",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Mountain+Climber+exercise+demonstration"
+		},
+		{
+				"exercise": "Cross-Body Mountain Climber",
+				"description": "From a plank, drive each knee toward the opposite elbow.",
+				"muscles": "Obliques; shoulders; hip flexors; core",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Cross-Body+Mountain+Climber+exercise+demonstration"
+		},
+		{
+				"exercise": "Burpee",
+				"description": "Squat down, kick feet back, return forward, and jump up.",
+				"muscles": "Full body; chest; legs; shoulders; core; cardio",
+				"reps": "6-15",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Burpee+exercise+demonstration"
+		},
+		{
+				"exercise": "Half Burpee",
+				"description": "Squat down, jump or step back to plank, return forward, and stand without the jump.",
+				"muscles": "Full body; chest; legs; core",
+				"reps": "8-18",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Half+Burpee+exercise+demonstration"
+		},
+		{
+				"exercise": "Plank",
+				"description": "Hold a straight-body position on forearms or hands while bracing the midsection.",
+				"muscles": "Core; shoulders; glutes",
+				"reps": "hold",
+				"interval": "20-60 sec",
+				"demo": "https://www.youtube.com/results?search_query=Plank+exercise+demonstration"
+		},
+		{
+				"exercise": "High Plank Shoulder Tap",
+				"description": "From a high plank, tap one shoulder with the opposite hand while resisting rotation.",
+				"muscles": "Core; shoulders; chest",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=High+Plank+Shoulder+Tap+exercise+demonstration"
+		},
+		{
+				"exercise": "Side Plank",
+				"description": "Support your body on one forearm and the side of one foot while holding a straight line.",
+				"muscles": "Obliques; shoulders; core",
+				"reps": "hold",
+				"interval": "15-45 sec/side",
+				"demo": "https://www.youtube.com/results?search_query=Side+Plank+exercise+demonstration"
+		},
+		{
+				"exercise": "Side Plank Hip Dip",
+				"description": "From a side plank, lower the hips slightly and lift them back up.",
+				"muscles": "Obliques; core; shoulders",
+				"reps": "8-15/side",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Side+Plank+Hip+Dip+exercise+demonstration"
+		},
+		{
+				"exercise": "Forearm Plank Reach",
+				"description": "From a plank, reach one arm forward briefly while keeping hips stable.",
+				"muscles": "Core; shoulders; back",
+				"reps": "10-20 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Forearm+Plank+Reach+exercise+demonstration"
+		},
+		{
+				"exercise": "Dead Bug",
+				"description": "Lie on your back and slowly extend opposite arm and leg while bracing your core.",
+				"muscles": "Core; hip flexors; coordination",
+				"reps": "8-15/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Dead+Bug+exercise+demonstration"
+		},
+		{
+				"exercise": "Bird Dog",
+				"description": "From hands and knees, extend opposite arm and leg, then return with control.",
+				"muscles": "Core; lower back; glutes; shoulders",
+				"reps": "8-15/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Bird+Dog+exercise+demonstration"
+		},
+		{
+				"exercise": "Crunch",
+				"description": "Lie on your back and lift shoulders off the floor using your abs.",
+				"muscles": "Upper abs",
+				"reps": "15-25",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Crunch+exercise+demonstration"
+		},
+		{
+				"exercise": "Reverse Crunch",
+				"description": "Lift knees toward the chest and curl hips off the floor.",
+				"muscles": "Lower abs; hip flexors",
+				"reps": "10-20",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Reverse+Crunch+exercise+demonstration"
+		},
+		{
+				"exercise": "Bicycle Crunch",
+				"description": "Alternate elbow-to-knee crunches while extending the opposite leg.",
+				"muscles": "Abs; obliques; hip flexors",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Bicycle+Crunch+exercise+demonstration"
+		},
+		{
+				"exercise": "V-Up",
+				"description": "Lift legs and torso at the same time to meet in the middle, then lower.",
+				"muscles": "Abs; hip flexors",
+				"reps": "8-15",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=V-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Toe Touch Crunch",
+				"description": "Lie on your back with legs up and reach hands toward your toes.",
+				"muscles": "Abs",
+				"reps": "12-25",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Toe+Touch+Crunch+exercise+demonstration"
+		},
+		{
+				"exercise": "Heel Tap",
+				"description": "Lie on your back with knees bent and tap each heel side to side.",
+				"muscles": "Obliques; abs",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Heel+Tap+exercise+demonstration"
+		},
+		{
+				"exercise": "Russian Twist",
+				"description": "Sit slightly reclined and rotate torso side to side.",
+				"muscles": "Obliques; abs; hip flexors",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Russian+Twist+exercise+demonstration"
+		},
+		{
+				"exercise": "Hollow Body Hold",
+				"description": "Lie on your back and hold shoulders and legs slightly off the floor.",
+				"muscles": "Deep core; abs; hip flexors",
+				"reps": "hold",
+				"interval": "15-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hollow+Body+Hold+exercise+demonstration"
+		},
+		{
+				"exercise": "Flutter Kick",
+				"description": "Lie on your back and alternate small up-and-down leg kicks while bracing the core.",
+				"muscles": "Lower abs; hip flexors",
+				"reps": "20-50 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Flutter+Kick+exercise+demonstration"
+		},
+		{
+				"exercise": "Scissor Kick",
+				"description": "Lie on your back and alternate crossing straight legs over each other.",
+				"muscles": "Lower abs; hip flexors",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Scissor+Kick+exercise+demonstration"
+		},
+		{
+				"exercise": "Superman",
+				"description": "Lie face down and lift arms, chest, and legs off the floor.",
+				"muscles": "Lower back; glutes; shoulders",
+				"reps": "10-20",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Superman+exercise+demonstration"
+		},
+		{
+				"exercise": "Y-T-W Raise",
+				"description": "Lie face down and lift arms into Y, T, and W positions with control.",
+				"muscles": "Upper back; rear shoulders; posture muscles",
+				"reps": "6-12 cycles",
+				"interval": "20-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Y-T-W+Raise+exercise+demonstration"
+		},
+		{
+				"exercise": "Jumping Jack",
+				"description": "Jump feet out while raising arms overhead, then return to start.",
+				"muscles": "Cardio; calves; shoulders; full body",
+				"reps": "25-60",
+				"interval": "20-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Jumping+Jack+exercise+demonstration"
+		},
+		{
+				"exercise": "High Knees",
+				"description": "Run in place while driving knees upward quickly.",
+				"muscles": "Cardio; hip flexors; calves; core",
+				"reps": "30-60 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=High+Knees+exercise+demonstration"
+		},
+		{
+				"exercise": "Butt Kicks",
+				"description": "Jog in place while kicking heels toward the glutes.",
+				"muscles": "Hamstrings; calves; cardio",
+				"reps": "30-60 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Butt+Kicks+exercise+demonstration"
+		},
+		{
+				"exercise": "Tuck Jump",
+				"description": "Jump vertically and pull knees up toward the chest before landing softly.",
+				"muscles": "Quads; glutes; calves; core",
+				"reps": "6-12",
+				"interval": "10-20 sec",
+				"demo": "https://www.youtube.com/results?search_query=Tuck+Jump+exercise+demonstration"
+		},
+		{
+				"exercise": "Inchworm",
+				"description": "Hinge forward to place your hands on the floor, walk them out to a plank, then walk them back and stand tall.",
+				"muscles": "Shoulders; chest; core; hamstrings",
+				"reps": "6-12",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Inchworm+exercise+demonstration"
+		},
+		{
+				"exercise": "Beast Hold",
+				"description": "Hover your knees a few inches off the floor on hands and feet while keeping your back flat and core braced.",
+				"muscles": "Core; shoulders; quads; hip flexors",
+				"reps": "hold",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Beast+Hold+exercise+demonstration"
+		},
+		{
+				"exercise": "Beast Reach",
+				"description": "From a beast position, briefly reach one hand forward without letting your hips twist.",
+				"muscles": "Core; shoulders; chest; quads",
+				"reps": "10-20 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Beast+Reach+exercise+demonstration"
+		},
+		{
+				"exercise": "Beast Shoulder Tap",
+				"description": "From a beast position, tap one shoulder with the opposite hand while staying stable through the trunk.",
+				"muscles": "Core; shoulders; chest; quads",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Beast+Shoulder+Tap+exercise+demonstration"
+		},
+		{
+				"exercise": "Sit-Through",
+				"description": "From a hands-and-feet hover, rotate your body and thread one leg through until it extends out to the side, then return.",
+				"muscles": "Core; shoulders; glutes; obliques",
+				"reps": "8-16/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Sit-Through+exercise+demonstration"
+		},
+		{
+				"exercise": "Kick-Through",
+				"description": "From a tabletop hover, pivot and kick one leg across your body while lifting the opposite hand.",
+				"muscles": "Core; shoulders; glutes; obliques",
+				"reps": "8-16/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Kick-Through+exercise+demonstration"
+		},
+		{
+				"exercise": "Bear Plank Knee Tap",
+				"description": "Hold a hovering bear plank and tap one knee lightly to the floor at a time with control.",
+				"muscles": "Core; shoulders; quads; hip flexors",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Bear+Plank+Knee+Tap+exercise+demonstration"
+		},
+		{
+				"exercise": "Seal Jack",
+				"description": "Jump your feet apart and together while swinging your arms straight out in front and back to the sides.",
+				"muscles": "Cardio; shoulders; calves; adductors",
+				"reps": "25-60",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Seal+Jack+exercise+demonstration"
+		},
+		{
+				"exercise": "Split Jump",
+				"description": "Start in a split stance, jump explosively, and switch legs in the air before landing softly.",
+				"muscles": "Quads; glutes; calves; core",
+				"reps": "10-20 total",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Split+Jump+exercise+demonstration"
+		},
+		{
+				"exercise": "Broad Jump",
+				"description": "Swing your arms and jump forward as far as you can, then reset with a controlled landing.",
+				"muscles": "Quads; glutes; hamstrings; calves",
+				"reps": "6-12",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Broad+Jump+exercise+demonstration"
+		},
+		{
+				"exercise": "Lateral Bound",
+				"description": "Push off one foot and jump sideways to the other, landing softly and absorbing the impact.",
+				"muscles": "Glutes; quads; calves; core",
+				"reps": "12-24 total",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Lateral+Bound+exercise+demonstration"
+		},
+		{
+				"exercise": "Power Skip",
+				"description": "Skip forward or in place with an exaggerated knee drive and explosive upward push from the ground.",
+				"muscles": "Glutes; calves; hip flexors; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Power+Skip+exercise+demonstration"
+		},
+		{
+				"exercise": "Fast Feet",
+				"description": "Stay low and rapidly shuffle your feet in place while pumping your arms.",
+				"muscles": "Calves; quads; cardio; core",
+				"reps": "30-60 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Fast+Feet+exercise+demonstration"
+		},
+		{
+				"exercise": "Heisman",
+				"description": "Hop side to side while driving one knee up and swinging your arms like a running back cut.",
+				"muscles": "Glutes; calves; core; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Heisman+exercise+demonstration"
+		},
+		{
+				"exercise": "Ski Hop",
+				"description": "Jump both feet side to side together in a quick rhythm while staying light on the ground.",
+				"muscles": "Calves; quads; glutes; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Ski+Hop+exercise+demonstration"
+		},
+		{
+				"exercise": "Frog Jump",
+				"description": "Drop low with hands near the floor, then explode forward or upward into a powerful jump.",
+				"muscles": "Quads; glutes; calves; core",
+				"reps": "8-15",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Frog+Jump+exercise+demonstration"
+		},
+		{
+				"exercise": "180 Jump Turn",
+				"description": "Jump vertically and rotate your body 180 degrees in the air before landing under control.",
+				"muscles": "Quads; glutes; calves; core",
+				"reps": "8-16",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=180+Jump+Turn+exercise+demonstration"
+		},
+		{
+				"exercise": "Snap Down",
+				"description": "Rise tall, then quickly drop into an athletic quarter squat and stick the landing position.",
+				"muscles": "Quads; glutes; calves; core",
+				"reps": "12-20",
+				"interval": "20-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Snap+Down+exercise+demonstration"
+		},
+		{
+				"exercise": "Prisoner Good Morning",
+				"description": "Place your hands behind your head, hinge at the hips with a flat back, and stand back up.",
+				"muscles": "Hamstrings; glutes; lower back; core",
+				"reps": "12-20",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Prisoner+Good+Morning+exercise+demonstration"
+		},
+		{
+				"exercise": "Hamstring Walkout",
+				"description": "From a bridge position, slowly step your heels away from your body and back in while keeping hips lifted.",
+				"muscles": "Hamstrings; glutes; core",
+				"reps": "6-12",
+				"interval": "20-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hamstring+Walkout+exercise+demonstration"
+		},
+		{
+				"exercise": "Reverse Plank",
+				"description": "Support yourself on your hands and heels with your chest up and hold your body in a straight line.",
+				"muscles": "Glutes; hamstrings; shoulders; core",
+				"reps": "hold",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Reverse+Plank+exercise+demonstration"
+		},
+		{
+				"exercise": "Reverse Plank Leg Lift",
+				"description": "From a reverse plank, lift one straight leg at a time without letting your hips sag.",
+				"muscles": "Glutes; hamstrings; shoulders; core",
+				"reps": "8-16/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Reverse+Plank+Leg+Lift+exercise+demonstration"
+		},
+		{
+				"exercise": "Hollow Rock",
+				"description": "Hold a hollow body shape and gently rock forward and back without losing tension.",
+				"muscles": "Abs; hip flexors; deep core",
+				"reps": "12-25",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hollow+Rock+exercise+demonstration"
+		},
+		{
+				"exercise": "Arch Hold",
+				"description": "Lie face down and lift your chest, arms, and legs slightly off the floor while holding tension.",
+				"muscles": "Lower back; glutes; shoulders",
+				"reps": "hold",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Arch+Hold+exercise+demonstration"
+		},
+		{
+				"exercise": "Swimmer",
+				"description": "Lie face down and alternate lifting opposite arm and leg in a smooth fluttering motion.",
+				"muscles": "Lower back; glutes; shoulders; upper back",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Swimmer+exercise+demonstration"
+		},
+		{
+				"exercise": "Prone Snow Angel",
+				"description": "Lie face down and sweep your arms from overhead to your sides while keeping them off the floor.",
+				"muscles": "Upper back; rear shoulders; lower back",
+				"reps": "10-20",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Prone+Snow+Angel+exercise+demonstration"
+		},
+		{
+				"exercise": "Standing Oblique Crunch",
+				"description": "Bring one knee up toward the same-side elbow in a standing crunch, then switch sides.",
+				"muscles": "Obliques; abs; hip flexors",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Standing+Oblique+Crunch+exercise+demonstration"
+		},
+		{
+				"exercise": "Standing Cross Crunch",
+				"description": "Drive one knee up toward the opposite elbow while rotating through your torso, then alternate.",
+				"muscles": "Obliques; abs; hip flexors",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Standing+Cross+Crunch+exercise+demonstration"
+		},
+		{
+				"exercise": "Standing Knee Drive",
+				"description": "Drive one knee up sharply at a time while staying tall and moving at a quick cadence.",
+				"muscles": "Hip flexors; core; calves; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Standing+Knee+Drive+exercise+demonstration"
+		},
+		{
+				"exercise": "Alternating Front Kick",
+				"description": "Kick one leg straight out in front at a time while keeping your chest lifted and core tight.",
+				"muscles": "Quads; hip flexors; core; balance muscles",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Alternating+Front+Kick+exercise+demonstration"
+		},
+		{
+				"exercise": "Side Kick",
+				"description": "Lift and extend one leg out to the side with control, then repeat and switch sides.",
+				"muscles": "Glutes; abductors; core; balance muscles",
+				"reps": "10-20/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Side+Kick+exercise+demonstration"
+		},
+		{
+				"exercise": "Down Dog Toe Tap",
+				"description": "From a downward dog position, reach one hand back to tap the opposite foot and alternate sides.",
+				"muscles": "Shoulders; core; hamstrings; obliques",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Down+Dog+Toe+Tap+exercise+demonstration"
+		},
+		{
+				"exercise": "Down Dog Knee Drive",
+				"description": "Flow from downward dog into a knee drive toward your chest or nose, then return and alternate.",
+				"muscles": "Core; shoulders; hip flexors; chest",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Down+Dog+Knee+Drive+exercise+demonstration"
+		},
+		{
+				"exercise": "Tabletop Toe Tap",
+				"description": "Sit in a reverse tabletop and alternate lifting one hand to tap the opposite foot.",
+				"muscles": "Core; shoulders; glutes; hamstrings",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Tabletop+Toe+Tap+exercise+demonstration"
+		},
+		{
+				"exercise": "Tabletop Reach",
+				"description": "From a tabletop position, lift your hips and reach one arm overhead while staying stable through the shoulders.",
+				"muscles": "Shoulders; glutes; core; chest",
+				"reps": "8-16/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Tabletop+Reach+exercise+demonstration"
+		},
+		{
+				"exercise": "Crab Toe Touch",
+				"description": "From a crab position, lift your hips and reach one hand to the opposite foot, then alternate sides.",
+				"muscles": "Core; shoulders; glutes; hamstrings",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Crab+Toe+Touch+exercise+demonstration"
+		},
+		{
+				"exercise": "Side-Lying Leg Raise",
+				"description": "Lie on one side and lift the top leg straight up and down with control.",
+				"muscles": "Glutes; abductors; hips",
+				"reps": "12-25/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Side-Lying+Leg+Raise+exercise+demonstration"
+		},
+		{
+				"exercise": "Side-Lying Inner Thigh Lift",
+				"description": "Lie on your side and lift the bottom leg upward to target the inner thigh.",
+				"muscles": "Adductors; hips; core",
+				"reps": "12-25/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Side-Lying+Inner+Thigh+Lift+exercise+demonstration"
+		},
+		{
+				"exercise": "Lateral Shuffle",
+				"description": "Stay low and shuffle quickly side to side for short bursts while keeping your feet active.",
+				"muscles": "Quads; glutes; calves; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Lateral+Shuffle+exercise+demonstration"
+		},
+		{
+				"exercise": "Carioca",
+				"description": "Move laterally with a fast grapevine step pattern while rotating through the hips.",
+				"muscles": "Glutes; calves; hip flexors; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Carioca+exercise+demonstration"
+		},
+		{
+				"exercise": "Hindu Push-Up",
+				"description": "Flow from a pike position forward into an arched chest-up position, then press back to the start.",
+				"muscles": "Shoulders; chest; triceps; core",
+				"reps": "6-15",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hindu+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Dive Bomber Push-Up",
+				"description": "Lower your head and chest in a swooping path under an imaginary bar, then reverse the motion back.",
+				"muscles": "Shoulders; chest; triceps; upper back",
+				"reps": "5-12",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Dive+Bomber+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Hand-Release Push-Up",
+				"description": "Lower fully to the floor, briefly lift your hands, then press back up with control.",
+				"muscles": "Chest; shoulders; triceps; upper back",
+				"reps": "6-15",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hand-Release+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Pseudo Planche Push-Up",
+				"description": "Lean your shoulders forward past your hands and perform a push-up while keeping the body rigid.",
+				"muscles": "Shoulders; chest; triceps; wrists; core",
+				"reps": "4-10",
+				"interval": "15-25 sec",
+				"demo": "https://www.youtube.com/results?search_query=Pseudo+Planche+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Scapular Push-Up",
+				"description": "Hold a high plank and move only through the shoulder blades by sinking and pressing the chest away from the floor.",
+				"muscles": "Shoulders; serratus; chest; core",
+				"reps": "12-25",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Scapular+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Dolphin Push-Up",
+				"description": "Start on forearms in a pike, shift your head forward, then press back through the shoulders.",
+				"muscles": "Shoulders; triceps; chest; core",
+				"reps": "8-18",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Dolphin+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Forearm Dolphin Rock",
+				"description": "From a forearm pike, rock your body forward and back while keeping hips lifted and shoulders active.",
+				"muscles": "Shoulders; forearms; core; chest",
+				"reps": "12-25",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Forearm+Dolphin+Rock+exercise+demonstration"
+		},
+		{
+				"exercise": "Wall Walk",
+				"description": "Walk your feet up a wall and your hands closer in, then return with control.",
+				"muscles": "Shoulders; arms; chest; core",
+				"reps": "3-8",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Wall+Walk+exercise+demonstration"
+		},
+		{
+				"exercise": "Wall Handstand Hold",
+				"description": "Kick or walk into a wall-supported handstand and hold a stacked position while bracing the midline.",
+				"muscles": "Shoulders; arms; wrists; core",
+				"reps": "hold",
+				"interval": "15-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Wall+Handstand+Hold+exercise+demonstration"
+		},
+		{
+				"exercise": "Wall Handstand Shoulder Tap",
+				"description": "In a wall-supported handstand, briefly tap one shoulder at a time while resisting sway.",
+				"muscles": "Shoulders; arms; wrists; core",
+				"reps": "6-16 total",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Wall+Handstand+Shoulder+Tap+exercise+demonstration"
+		},
+		{
+				"exercise": "T Push-Up",
+				"description": "Perform a push-up and rotate into a side plank with one arm reaching upward before switching sides.",
+				"muscles": "Chest; shoulders; triceps; obliques",
+				"reps": "6-14 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=T+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Spiderman Push-Up",
+				"description": "As you lower into a push-up, drive one knee toward the same-side elbow and alternate sides.",
+				"muscles": "Chest; shoulders; triceps; core",
+				"reps": "6-14 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Spiderman+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Staggered Push-Up",
+				"description": "Place one hand slightly higher than the other, perform push-ups, then switch hand positions.",
+				"muscles": "Chest; shoulders; triceps; core",
+				"reps": "8-16 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Staggered+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Archer Push-Up",
+				"description": "Push more through one arm while the other extends wider to the side, then alternate.",
+				"muscles": "Chest; shoulders; triceps; arms",
+				"reps": "4-10/side",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Archer+Push-Up+exercise+demonstration"
+		},
+		{
+				"exercise": "Crab Reach",
+				"description": "From a crab position, lift hips and reach one arm overhead across the body, then alternate sides.",
+				"muscles": "Shoulders; triceps; glutes; core",
+				"reps": "8-16/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Crab+Reach+exercise+demonstration"
+		},
+		{
+				"exercise": "Crab Knee Touch",
+				"description": "Hold a crab position and alternate bringing one knee toward the opposite hand.",
+				"muscles": "Shoulders; triceps; core; hip flexors",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Crab+Knee+Touch+exercise+demonstration"
+		},
+		{
+				"exercise": "Reverse Tabletop March",
+				"description": "Lift into a reverse tabletop and alternate raising one foot at a time without dropping the hips.",
+				"muscles": "Shoulders; triceps; glutes; core",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Reverse+Tabletop+March+exercise+demonstration"
+		},
+		{
+				"exercise": "Reverse Tabletop Shoulder Shift",
+				"description": "In reverse tabletop, shift your weight side to side to load one arm at a time.",
+				"muscles": "Shoulders; triceps; wrists; core",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Reverse+Tabletop+Shoulder+Shift+exercise+demonstration"
+		},
+		{
+				"exercise": "Beast Reach Back",
+				"description": "From a beast hover, reach one hand back toward the opposite foot and alternate sides.",
+				"muscles": "Shoulders; arms; core; quads",
+				"reps": "10-20 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Beast+Reach+Back+exercise+demonstration"
+		},
+		{
+				"exercise": "Beast Pull-Back",
+				"description": "Hover in beast and drive one elbow back as if rowing while stabilizing through the other arm.",
+				"muscles": "Shoulders; arms; upper back; core",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Beast+Pull-Back+exercise+demonstration"
+		},
+		{
+				"exercise": "Seal Crawl",
+				"description": "Move forward using only your hands while keeping legs mostly passive behind you.",
+				"muscles": "Shoulders; chest; triceps; forearms",
+				"reps": "10-20 steps",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Seal+Crawl+exercise+demonstration"
+		},
+		{
+				"exercise": "Lateral Seal Crawl",
+				"description": "Travel sideways using your hands while keeping your torso low and legs following behind.",
+				"muscles": "Shoulders; chest; triceps; forearms",
+				"reps": "8-16 steps/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Lateral+Seal+Crawl+exercise+demonstration"
+		},
+		{
+				"exercise": "Prone Cobra",
+				"description": "Lie face down and lift your chest while pulling your elbows back and squeezing the upper back.",
+				"muscles": "Rear shoulders; upper back; lower back",
+				"reps": "10-20",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Prone+Cobra+exercise+demonstration"
+		},
+		{
+				"exercise": "Wrist Push-Up Rock",
+				"description": "From hands and knees, gently rock your weight forward and back to load the wrists and forearms.",
+				"muscles": "Forearms; wrists; shoulders",
+				"reps": "12-25",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Wrist+Push-Up+Rock+exercise+demonstration"
+    },
+    {
+				"exercise": "Switch Kicks",
+				"description": "Jump from one foot to the other while kicking the opposite leg forward at hip height.",
+				"muscles": "Hip flexors; quads; calves; core",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Switch+Kicks+exercise+demonstration"
+    },
+    {
+				"exercise": "Power Jacks",
+				"description": "Do a jumping-jack motion, dropping into a squat as your feet open and your arms come down.",
+				"muscles": "Quads; glutes; shoulders; cardio",
+				"reps": "15-30",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Power+Jacks+exercise+demonstration"
+    },
+    {
+				"exercise": "Power Knees",
+				"description": "Balance on one leg and drive the opposite knee upward to meet your hands at waist level before switching sides.",
+				"muscles": "Hip flexors; core; quads; cardio",
+				"reps": "12-24/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Power+Knees+exercise+demonstration"
+    },
+    {
+				"exercise": "Power Jumps",
+				"description": "Explode upward from a squat and drive your knees toward waist height while bringing your hands down to meet them.",
+				"muscles": "Quads; glutes; calves; core",
+				"reps": "8-16",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Power+Jumps+exercise+demonstration"
+    },
+    {
+				"exercise": "Globe Jumps",
+				"description": "Jump in a four-point rotation while staying low, completing a full turn back to the front as one rep.",
+				"muscles": "Quads; glutes; calves; core",
+				"reps": "4-10",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Globe+Jumps+exercise+demonstration"
+    },
+    {
+				"exercise": "Suicide Jumps",
+				"description": "Drop to the floor, jump your legs back to plank, spring your feet forward, and explode upward to standing.",
+				"muscles": "Full body; chest; legs; shoulders; core",
+				"reps": "6-15",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Suicide+Jumps+exercise+demonstration"
+    },
+    {
+				"exercise": "Push-Up Jacks",
+				"description": "Perform push-ups while jumping your feet apart on the way down and back together on the way up.",
+				"muscles": "Chest; shoulders; triceps; core",
+				"reps": "6-15",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Push-Up+Jacks+exercise+demonstration"
+    },
+    {
+				"exercise": "Low Plank Oblique",
+				"description": "From a forearm plank, drive your knees toward the same-side shoulder while alternating sides and keeping hips low.",
+				"muscles": "Obliques; abs; shoulders; core",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Low+Plank+Oblique+exercise+demonstration"
+    },
+    {
+				"exercise": "Suicide Drills",
+				"description": "Run a few steps side to side and squat to touch the floor at each end.",
+				"muscles": "Quads; glutes; calves; cardio",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Suicide+Drills+exercise+demonstration"
+    },
+    {
+				"exercise": "Wide Football Sprints",
+				"description": "Sprint in a wide stance, rotate through directions, shuffle laterally, then drop low and reset into a sprint.",
+				"muscles": "Quads; glutes; calves; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Wide+Football+Sprints+exercise+demonstration"
+    },
+    {
+				"exercise": "Basketball Drills",
+				"description": "Start low with hands near the floor, then jump powerfully as if shooting a basketball and repeat.",
+				"muscles": "Quads; glutes; calves; shoulders",
+				"reps": "12-24",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Basketball+Drills+exercise+demonstration"
+    },
+    {
+				"exercise": "Level 1 Drills",
+				"description": "Drop down, do a short set of push-ups and floor runs, then jump back up to standing.",
+				"muscles": "Chest; shoulders; triceps; core",
+				"reps": "4-10",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Level+1+Drills+exercise+demonstration"
+    },
+    {
+				"exercise": "Ski Abs",
+				"description": "From plank, jump both feet toward one shoulder, return to center, and alternate sides.",
+				"muscles": "Obliques; abs; shoulders; core",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Ski+Abs+exercise+demonstration"
+    },
+    {
+				"exercise": "In-Out Abs",
+				"description": "From plank, jump both feet in between your hands and then back out to plank.",
+				"muscles": "Abs; hip flexors; shoulders; core",
+				"reps": "12-24",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=In-Out+Abs+exercise+demonstration"
+    },
+    {
+				"exercise": "Jabs",
+				"description": "Stay in a low athletic stance and alternate straight punches from left to right.",
+				"muscles": "Shoulders; chest; core; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Jabs+exercise+demonstration"
+    },
+    {
+				"exercise": "Cross Jacks",
+				"description": "Jump your feet from a wide side stance to a front-back stance while coordinating single-arm jack motions.",
+				"muscles": "Shoulders; calves; quads; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Cross+Jacks+exercise+demonstration"
+    },
+    {
+				"exercise": "Uppercuts",
+				"description": "Stay low in a wide stance and alternate upward punching motions with power.",
+				"muscles": "Shoulders; arms; core; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Uppercuts+exercise+demonstration"
+    },
+    {
+				"exercise": "Attack",
+				"description": "Hold a low squat-like stance and fire rapid open-hand punches forward.",
+				"muscles": "Shoulders; quads; core; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Attack+exercise+demonstration"
+    },
+    {
+				"exercise": "Belt Kicks",
+				"description": "Step side to side while kicking the opposite leg forward with your hands at your hips.",
+				"muscles": "Hip flexors; quads; core; cardio",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Belt+Kicks+exercise+demonstration"
+    },
+    {
+				"exercise": "Hit the Floor",
+				"description": "Jump side to side, reach high in the air, then bend down to touch the floor between your legs as you land.",
+				"muscles": "Quads; glutes; calves; cardio",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hit+the+Floor+exercise+demonstration"
+    },
+    {
+				"exercise": "Triceps Dips",
+				"description": "Support yourself on your hands and feet and bend your elbows to dip your body up and down.",
+				"muscles": "Triceps; shoulders; chest; core",
+				"reps": "8-20",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Triceps+Dips+exercise+demonstration"
+    },
+    {
+				"exercise": "Triceps Dips with One Leg Up",
+				"description": "Perform triceps dips while keeping one leg raised, then switch sides.",
+				"muscles": "Triceps; shoulders; chest; core",
+				"reps": "6-12/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Triceps+Dips+with+One+Leg+Up+exercise+demonstration"
+    },
+    {
+				"exercise": "Triceps Ball Push-Ups",
+				"description": "From an inverted V, roll forward with a rounded back and perform a tight triceps-focused push-up.",
+				"muscles": "Triceps; shoulders; chest; core",
+				"reps": "6-12",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=Triceps+Ball+Push-Ups+exercise+demonstration"
+    },
+    {
+				"exercise": "Hurdle Jumps",
+				"description": "Run in place briefly and then hop sideways over an imaginary hurdle, repeating back and forth.",
+				"muscles": "Quads; calves; glutes; cardio",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hurdle+Jumps+exercise+demonstration"
+    },
+    {
+				"exercise": "Moving Push-Ups",
+				"description": "Step sideways as you lower and raise through each push-up, then travel in the other direction.",
+				"muscles": "Chest; shoulders; triceps; core",
+				"reps": "6-14 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Moving+Push-Ups+exercise+demonstration"
+    },
+    {
+				"exercise": "Hop Squats to Push-Ups",
+				"description": "Alternate quick low squat hops with a drop to plank for a standard push-up on cue.",
+				"muscles": "Full body; chest; legs; shoulders; core",
+				"reps": "6-14",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hop+Squats+to+Push-Ups+exercise+demonstration"
+    },
+    {
+				"exercise": "Plank Pulses",
+				"description": "Hold plank, lift one leg, and pulse it up and down before switching sides.",
+				"muscles": "Core; glutes; shoulders; hamstrings",
+				"reps": "12-24/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Plank+Pulses+exercise+demonstration"
+    },
+    {
+				"exercise": "Wide Downward Dog",
+				"description": "Hold a wide downward-dog position with hands and feet planted while lengthening through the spine and hamstrings.",
+				"muscles": "Shoulders; hamstrings; calves; back",
+				"reps": "hold",
+				"interval": "20-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Wide+Downward+Dog+exercise+demonstration"
+    },
+    {
+				"exercise": "Hamstring Stretch",
+				"description": "Fold forward from a wide or narrow stance and hold the stretch through the backs of the legs.",
+				"muscles": "Hamstrings; calves; lower back",
+				"reps": "hold",
+				"interval": "20-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hamstring+Stretch+exercise+demonstration"
+    },
+    {
+				"exercise": "Lunge Hold and Pulse",
+				"description": "Lower into a lunge, hold the bottom, then add small pulses before switching sides.",
+				"muscles": "Quads; glutes; hamstrings; core",
+				"reps": "8-16/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Lunge+Hold+and+Pulse+exercise+demonstration"
+    },
+    {
+				"exercise": "Plie Yoga Stretch",
+				"description": "Hold a wide turned-out squat and lean side to side to deepen the inner-thigh and hip stretch.",
+				"muscles": "Inner thighs; hips; quads; core",
+				"reps": "hold",
+				"interval": "20-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Plie+Yoga+Stretch+exercise+demonstration"
+    },
+    {
+				"exercise": "Quad Strengtheners",
+				"description": "Hover on hands and toes with knees off the floor, then pulse one lifted leg at a time.",
+				"muscles": "Quads; hip flexors; shoulders; core",
+				"reps": "12-24/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Quad+Strengtheners+exercise+demonstration"
+    },
+    {
+				"exercise": "Oblique Work",
+				"description": "From a hovering hands-and-knees position, draw one knee up along your side toward the shoulder and repeat.",
+				"muscles": "Obliques; core; shoulders; hip flexors",
+				"reps": "12-24/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Oblique+Work+exercise+demonstration"
+    },
+    {
+				"exercise": "Table Top Balance Pose",
+				"description": "Balance on one leg while hinging forward and reaching your arms out in front, then switch sides.",
+				"muscles": "Hamstrings; glutes; core; balance muscles",
+				"reps": "hold",
+				"interval": "20-40 sec/side",
+				"demo": "https://www.youtube.com/results?search_query=Table+Top+Balance+Pose+exercise+demonstration"
+    },
+    {
+				"exercise": "Knee to Chest Stretch",
+				"description": "Stand tall, pull one knee into your chest, hold briefly, and switch sides.",
+				"muscles": "Glutes; hips; lower back",
+				"reps": "hold",
+				"interval": "20-30 sec/side",
+				"demo": "https://www.youtube.com/results?search_query=Knee+to+Chest+Stretch+exercise+demonstration"
+    },
+    {
+				"exercise": "Knee to Oblique Stretch",
+				"description": "Stand tall, draw one knee out to the side with same-side arm support, and hold before switching.",
+				"muscles": "Hips; glutes; adductors; balance muscles",
+				"reps": "hold",
+				"interval": "20-30 sec/side",
+				"demo": "https://www.youtube.com/results?search_query=Knee+to+Oblique+Stretch+exercise+demonstration"
+    },
+    {
+				"exercise": "Hip Openers",
+				"description": "Stay low in a squat and press your knees outward to open the hips and inner thighs.",
+				"muscles": "Hips; adductors; glutes; lower back",
+				"reps": "hold",
+				"interval": "20-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hip+Openers+exercise+demonstration"
+    },
+    {
+				"exercise": "Stance Jacks",
+				"description": "Jump from feet-together to a low wide stance while reaching one hand toward the floor and alternating sides.",
+				"muscles": "Quads; glutes; shoulders; cardio",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Stance+Jacks+exercise+demonstration"
+    },
+    {
+				"exercise": "Pedal",
+				"description": "Sprint in place, drop into alternating lunge hops, then return to the sprint rhythm.",
+				"muscles": "Quads; glutes; calves; cardio",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Pedal+exercise+demonstration"
+    },
+    {
+				"exercise": "Hooks and Jump Rope",
+				"description": "Throw hooks to the front and then mimic a quick jump-rope bounce before switching sides.",
+				"muscles": "Shoulders; arms; calves; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hooks+and+Jump+Rope+exercise+demonstration"
+    },
+    {
+				"exercise": "Level 2 Drills",
+				"description": "Drop to plank, complete push-ups and floor sprints, jump back in, and stand tall before repeating.",
+				"muscles": "Chest; shoulders; triceps; core",
+				"reps": "4-8",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Level+2+Drills+exercise+demonstration"
+    },
+    {
+				"exercise": "Scissor Runs",
+				"description": "Hop continuously while switching one foot forward and one back, pumping the arms in sync.",
+				"muscles": "Hip flexors; calves; quads; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Scissor+Runs+exercise+demonstration"
+    },
+    {
+				"exercise": "Jog in Place",
+				"description": "Run lightly in place with quick relaxed steps to raise your heart rate.",
+				"muscles": "Calves; hip flexors; cardio",
+				"reps": "30-60 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Jog+in+Place+exercise+demonstration"
+    },
+    {
+				"exercise": "High Knees with Twist",
+				"description": "Run in place while driving knees up and twisting your torso toward each lift.",
+				"muscles": "Obliques; hip flexors; calves; cardio",
+				"reps": "20-40 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=High+Knees+with+Twist+exercise+demonstration"
+    },
+    {
+				"exercise": "Jump Rope",
+				"description": "Mimic fast rope jumps with quick light bounces on the balls of your feet.",
+				"muscles": "Calves; shoulders; cardio",
+				"reps": "30-60",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Jump+Rope+exercise+demonstration"
+    },
+    {
+				"exercise": "Wide Tuck Jumps",
+				"description": "Jump upward from a wider stance and pull your knees up before landing softly.",
+				"muscles": "Quads; glutes; calves; core",
+				"reps": "6-12",
+				"interval": "10-20 sec",
+				"demo": "https://www.youtube.com/results?search_query=Wide+Tuck+Jumps+exercise+demonstration"
+    },
+    {
+				"exercise": "Twists",
+				"description": "Hold a C-sit and rotate your torso left and right with hands together in front of your chest.",
+				"muscles": "Obliques; abs; hip flexors",
+				"reps": "16-30 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Twists+exercise+demonstration"
+    },
+    {
+				"exercise": "Twists with Knee",
+				"description": "Rotate in a C-sit and lift the same-side knee toward your torso on each twist.",
+				"muscles": "Obliques; abs; hip flexors",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Twists+with+Knee+exercise+demonstration"
+    },
+    {
+				"exercise": "A-Frame Ab Twists",
+				"description": "In a C-sit, sweep your hands from overhead down to each side in an A-shaped pattern.",
+				"muscles": "Obliques; abs; hip flexors",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=A-Frame+Ab+Twists+exercise+demonstration"
+    },
+    {
+				"exercise": "A-Frame with Knee",
+				"description": "Perform the A-frame arm pattern in a C-sit while lifting the matching knee each rep.",
+				"muscles": "Obliques; abs; hip flexors",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=A-Frame+with+Knee+exercise+demonstration"
+    },
+    {
+				"exercise": "Hold Center",
+				"description": "Hold a C-sit position with your hands centered in front of your chest and core braced.",
+				"muscles": "Abs; hip flexors; deep core",
+				"reps": "hold",
+				"interval": "15-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hold+Center+exercise+demonstration"
+    },
+    {
+				"exercise": "Single Leg Raises",
+				"description": "In a supported C-sit, pull one leg in and out and then raise and lower it before switching sides.",
+				"muscles": "Lower abs; hip flexors; core",
+				"reps": "8-16/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Single+Leg+Raises+exercise+demonstration"
+    },
+    {
+				"exercise": "Both Legs",
+				"description": "In a supported C-sit, move both legs together by drawing them in and out and then lifting them up and down.",
+				"muscles": "Lower abs; hip flexors; core",
+				"reps": "8-16",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Both+Legs+exercise+demonstration"
+    },
+    {
+				"exercise": "High Plank Alternating Knees",
+				"description": "From high plank, alternate driving each knee toward the same-side shoulder.",
+				"muscles": "Obliques; shoulders; core; hip flexors",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=High+Plank+Alternating+Knees+exercise+demonstration"
+    },
+    {
+				"exercise": "Low Plank Alternating Knees",
+				"description": "From forearm plank, alternate drawing each knee toward the same-side shoulder with control.",
+				"muscles": "Obliques; shoulders; core; hip flexors",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Low+Plank+Alternating+Knees+exercise+demonstration"
+    },
+    {
+				"exercise": "Pulse Tucks",
+				"description": "From low plank and then high plank, tuck your hips under in short controlled pulses.",
+				"muscles": "Abs; core; shoulders; glutes",
+				"reps": "12-24",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Pulse+Tucks+exercise+demonstration"
+    },
+    {
+				"exercise": "Switch Kicks with Hop Squats",
+				"description": "Alternate eight switch kicks with eight low hop squats in a repeating combo.",
+				"muscles": "Hip flexors; quads; glutes; cardio",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Switch+Kicks+with+Hop+Squats+exercise+demonstration"
+    },
+    {
+				"exercise": "High Jump",
+				"description": "Jump straight up as high as you can with feet together and soft landings.",
+				"muscles": "Quads; glutes; calves; core",
+				"reps": "8-16",
+				"interval": "15-30 sec",
+				"demo": "https://www.youtube.com/results?search_query=High+Jump+exercise+demonstration"
+    },
+    {
+				"exercise": "Moving Plank Walk",
+				"description": "Travel sideways in a high plank by stepping hands and feet together across the floor.",
+				"muscles": "Shoulders; chest; core; arms",
+				"reps": "8-16 steps/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Moving+Plank+Walk+exercise+demonstration"
+    },
+    {
+				"exercise": "Elbows into Suicide Drills",
+				"description": "Throw elbow strikes from standing and then drop into a short set of side-to-side suicide drills.",
+				"muscles": "Shoulders; core; quads; cardio",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Elbows+into+Suicide+Drills+exercise+demonstration"
+    },
+    {
+				"exercise": "4 and 4 Hops",
+				"description": "Hop four times on one leg with the other knee lifted, then switch sides and repeat.",
+				"muscles": "Glutes; calves; quads; balance muscles",
+				"reps": "8-16 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=4+and+4+Hops+exercise+demonstration"
+    },
+    {
+				"exercise": "Jab Switch Jump Squats",
+				"description": "Throw quick jabs from a squat, then jump and turn to repeat facing the other direction.",
+				"muscles": "Quads; glutes; shoulders; cardio",
+				"reps": "12-24 total",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Jab+Switch+Jump+Squats+exercise+demonstration"
+    },
+    {
+				"exercise": "Hip Flexor Burners",
+				"description": "Lift one knee, tap the toe, pulse the knee up, and extend the leg before switching sides.",
+				"muscles": "Hip flexors; abs; quads; balance muscles",
+				"reps": "8-16/side",
+				"interval": "20-40 sec",
+				"demo": "https://www.youtube.com/results?search_query=Hip+Flexor+Burners+exercise+demonstration"
+    },
+    {
+				"exercise": "Shoulder Burners in Plie",
+				"description": "Hold a plie squat while pulsing, sweeping, lifting, and circling straight arms through several patterns.",
+				"muscles": "Shoulders; quads; inner thighs; core",
+				"reps": "hold",
+				"interval": "20-45 sec",
+				"demo": "https://www.youtube.com/results?search_query=Shoulder+Burners+in+Plie+exercise+demonstration"
+    }
+  ]
+}
