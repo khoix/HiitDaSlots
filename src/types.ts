@@ -56,6 +56,8 @@ export interface Circuit {
   id: string;
   circuitNumber: number;
   items: WorkoutItem[];
+  /** Times to repeat this circuit’s body before inter-circuit rest; 1–9, default 1. */
+  loopCount?: number;
 }
 
 export interface WorkoutPlan {
@@ -78,7 +80,8 @@ export type AppState =
   | "history"
   | "savedWorkouts"
   | "favoriteExercises"
-  | "exerciseCatalog";
+  | "exerciseCatalog"
+  | "workoutBuilder";
 
 /** Completed session log entry */
 export interface WorkoutHistoryEntry {

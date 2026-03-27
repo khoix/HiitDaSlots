@@ -9,6 +9,8 @@ import { addSavedWorkout, isFavoriteExercise, toggleFavoriteExercise } from '../
 import { playSound } from '../audio/playSfx';
 import { SOUNDS } from '../audio/soundManifest';
 import { isBilateralHold, isHoldExercise } from '../utils/repDifficulty';
+import CircuitLoopMultiplier from './CircuitLoopMultiplier';
+import { clampLoopCount, recalculatePlanDuration } from '../utils/workoutGenerator';
 
 interface Props {
   plan: WorkoutPlan;
@@ -31,6 +33,21 @@ export default function WorkoutReadyScreen({ plan, onStart, onRegenerate, onUpda
   const closeExerciseModal = () => {
     playSound(SOUNDS.uiCancel);
     setSelectedExercise(null);
+  };
+
+  const updateCircuitLoop = (circuitId: string, loopCount: number) => {
+    const nextCircuits = plan.circuits.map((c) =>
+      c.id === circuitId ? { ...c, loopCount: clampLoopCount(loopCount) } : c
+    );
+    const nextPlan = {
+      ...plan,
+      circuits: nextCircuits,
+      estimatedDurationSeconds: recalculatePlanDuration({
+        ...plan,
+        circuits: nextCircuits,
+      }),
+    };
+    onUpdatePlan(nextPlan);
   };
 
   const formatTargetLabel = (exItem: any) => {
@@ -132,12 +149,19 @@ export default function WorkoutReadyScreen({ plan, onStart, onRegenerate, onUpda
                 className="h-px flex-1"
                 style={{ background: 'linear-gradient(to right, transparent, hsl(var(--accent)/0.5))' }}
               />
-              <span
-                className="font-display uppercase text-accent"
-                style={{ fontSize: 'clamp(0.8rem, 3vw, 1rem)', letterSpacing: '0.12em' }}
-              >
-                Circuit {circuit.circuitNumber}
-              </span>
+              <div className="flex items-center gap-2 shrink-0">
+                <span
+                  className="font-display uppercase text-accent"
+                  style={{ fontSize: 'clamp(0.8rem, 3vw, 1rem)', letterSpacing: '0.12em' }}
+                >
+                  Circuit {circuit.circuitNumber}
+                </span>
+                <CircuitLoopMultiplier
+                  value={clampLoopCount(circuit.loopCount)}
+                  onChange={(n) => updateCircuitLoop(circuit.id, n)}
+                  circuitLabel={`Circuit ${circuit.circuitNumber}`}
+                />
+              </div>
               <div
                 className="h-px flex-1"
                 style={{ background: 'linear-gradient(to left, transparent, hsl(var(--accent)/0.5))' }}

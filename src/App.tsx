@@ -23,6 +23,7 @@ import WorkoutHistoryScreen from "./components/WorkoutHistoryScreen";
 import SavedWorkoutsScreen from "./components/SavedWorkoutsScreen";
 import FavoriteExercisesScreen from "./components/FavoriteExercisesScreen";
 import ExerciseCatalogScreen from "./components/ExerciseCatalogScreen";
+import WorkoutBuilderScreen from "./components/WorkoutBuilderScreen";
 
 function buildPlanForOptions(options: SetupOptions): WorkoutPlan {
   const mode = options.exerciseSourceMode ?? "catalog";
@@ -43,6 +44,9 @@ function App() {
   const [appState, setAppState] = useState<AppState>("landing");
   const [setupOptions, setSetupOptions] = useState<SetupOptions | null>(null);
   const [workoutPlan, setWorkoutPlan] = useState<WorkoutPlan | null>(null);
+  const [builderReturn, setBuilderReturn] = useState<"landing" | "savedWorkouts">(
+    "landing"
+  );
 
   const handleSetupComplete = (options: SetupOptions) => {
     try {
@@ -92,6 +96,12 @@ function App() {
     setAppState("ready");
   };
 
+  const playPlanFromBuilder = (plan: WorkoutPlan) => {
+    setSetupOptions(plan.options);
+    setWorkoutPlan(plan);
+    setAppState("ready");
+  };
+
   return (
     <BgmMusicProvider>
       <div className="min-h-screen w-full bg-background text-foreground overflow-x-hidden selection:bg-primary/30">
@@ -103,6 +113,10 @@ function App() {
               onOpenCatalog={() => setAppState("exerciseCatalog")}
               onOpenSavedWorkouts={() => setAppState("savedWorkouts")}
               onOpenFavoriteExercises={() => setAppState("favoriteExercises")}
+              onOpenWorkoutBuilder={() => {
+                setBuilderReturn("landing");
+                setAppState("workoutBuilder");
+              }}
             />
           )}
 
@@ -124,6 +138,10 @@ function App() {
             <SavedWorkoutsScreen
               onBack={() => setAppState("landing")}
               onReplay={replaySavedWorkout}
+              onOpenBuilder={() => {
+                setBuilderReturn("savedWorkouts");
+                setAppState("workoutBuilder");
+              }}
             />
           )}
 
@@ -133,6 +151,13 @@ function App() {
 
           {appState === "exerciseCatalog" && (
             <ExerciseCatalogScreen onBack={() => setAppState("landing")} />
+          )}
+
+          {appState === "workoutBuilder" && (
+            <WorkoutBuilderScreen
+              onBack={() => setAppState(builderReturn)}
+              onPlayPlan={playPlanFromBuilder}
+            />
           )}
 
           {appState === "spinning" && workoutPlan && (

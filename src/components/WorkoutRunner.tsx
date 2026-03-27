@@ -10,6 +10,7 @@ import { SOUNDS } from '../audio/soundManifest';
 import { Switch } from './ui/switch';
 import { Label } from './ui/label';
 import { isBilateralHold, isHoldExercise } from '../utils/repDifficulty';
+import { flattenPlanItemsForRunner } from '../utils/workoutGenerator';
 
 const AUTO_START_STORAGE_KEY = 'hiitdaslots-auto-start-interval';
 type BilateralPhase = 'first' | 'transition' | 'second' | null;
@@ -21,10 +22,7 @@ interface Props {
 }
 
 export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
-  // Flatten items for linear progression
-  const flatItems = plan.circuits.flatMap(c => 
-    c.items.map(item => ({ ...item, circuitNum: c.circuitNumber }))
-  );
+  const flatItems = useMemo(() => flattenPlanItemsForRunner(plan), [plan]);
   const firstExerciseIndex = flatItems.findIndex((item) => item.type === 'exercise');
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -235,7 +233,7 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
         />
       </div>
 
-      <div className="flex flex-1 flex-col items-center justify-center p-4 pt-[4.75rem]">
+      <div className="flex flex-1 flex-col items-center justify-center p-4 md:pt-[4.75rem]">
         <div className="text-muted-foreground text-sm uppercase tracking-widest font-bold mb-4">
           Circuit {currentItem.circuitNum} of {plan.circuits.length}
         </div>
@@ -392,7 +390,7 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
           playSound(SOUNDS.uiCancel);
           onQuit();
         }}
-        className="absolute top-20 right-4 sm:right-6 z-30 text-muted-foreground hover:text-destructive font-display uppercase tracking-widest text-xs"
+        className="absolute top-4 right-4 sm:right-6 z-30 text-muted-foreground hover:text-destructive font-display uppercase tracking-widest text-xs"
       >
         Quit
       </button>

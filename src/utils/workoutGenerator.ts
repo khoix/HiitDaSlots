@@ -4,13 +4,15 @@ import {
   ExerciseWorkoutItem,
   RestWorkoutItem,
   SetupOptions,
+  WorkoutItem,
+  WorkoutMode,
   WorkoutPlan,
 } from "../types";
 import {
   buildExerciseByNameMap,
   getResolvedExercises,
 } from "../storage/catalogOverridesStorage";
-import { parseMuscleString } from "./parseMuscles";
+import { getUniqueMusclesFromExercises, parseMuscleString } from "./parseMuscles";
 import { generateId } from "./random";
 import { parseIntervalToSeconds } from "./timeUtils";
 import {
@@ -34,6 +36,17 @@ function targetTimeForMode(ex: Exercise, options: SetupOptions): number | undefi
     return scaleHoldSecondsFromInterval(ex.interval, options.repDifficulty ?? 50);
   }
   return undefined;
+}
+
+export function clampLoopCount(n: number | undefined): number {
+  const v = n ?? 1;
+  if (!Number.isFinite(v)) return 1;
+  return Math.min(9, Math.max(1, Math.floor(v)));
+}
+
+function estimatedItemSeconds(item: WorkoutItem, options: SetupOptions): number {
+  if (item.type === "rest") return item.duration;
+  return estimatedExerciseSeconds(item.exercise, options);
 }
 
 function estimatedExerciseSeconds(ex: Exercise, options: SetupOptions): number {
@@ -196,6 +209,7 @@ export function generateWorkoutPlan(
       id: generateId(),
       circuitNumber: c + 1,
       items: circuitItems,
+      loopCount: 1,
     });
   }
 
@@ -211,6 +225,213 @@ export function generateWorkoutPlan(
   }
 
   return plan;
+}
+
+/** Timing fields for custom-built workouts (builder UI). */
+export interface CustomWorkoutTimingInput {
+  mode: WorkoutMode;
+  workInterval: number;
+  restBetweenExercises: number;
+  restBetweenCircuits: number;
+  repDifficulty?: number;
+}
+
+export interface BuildCircuitListsOptions {
+  /** Same indices as `circuitLists` (empty slots ignored when building). */
+  circuitLoopCounts?: number[];
+}
+
+/**
+ * Split a circuit’s items into body (repeat N times) vs trailing inter-circuit rest.
+ */
+export function splitCircuitBodyAndRest(
+  circuit: Circuit,
+  hasRestBetweenNext: boolean
+): { body: WorkoutItem[]; circuitRest: RestWorkoutItem | null } {
+  const items = circuit.items;
+  if (items.length === 0) return { body: [], circuitRest: null };
+  const last = items[items.length - 1];
+  if (
+    hasRestBetweenNext &&
+    last.type === "rest" &&
+    (last as RestWorkoutItem).isCircuitRest
+  ) {
+    return {
+      body: items.slice(0, -1),
+      circuitRest: last as RestWorkoutItem,
+    };
+  }
+  return { body: items, circuitRest: null };
+}
+
+function cloneWorkoutItemWithNewId(item: WorkoutItem): WorkoutItem {
+  if (item.type === "exercise") {
+    return { ...item, id: generateId() };
+  }
+  return { ...item, id: generateId() };
+}
+
+/** Linear items for the runner: each loop round gets fresh item ids. */
+export function flattenPlanItemsForRunner(
+  plan: WorkoutPlan
+): Array<WorkoutItem & { circuitNum: number }> {
+  const flat: Array<WorkoutItem & { circuitNum: number }> = [];
+  const { circuits, options } = plan;
+  const betweenLoopsSec = options.restBetweenCircuits;
+  for (let ci = 0; ci < circuits.length; ci++) {
+    const circuit = circuits[ci];
+    const hasRestBetweenNext = ci < circuits.length - 1;
+    const { body, circuitRest } = splitCircuitBodyAndRest(circuit, hasRestBetweenNext);
+    const loops = clampLoopCount(circuit.loopCount);
+    for (let r = 0; r < loops; r++) {
+      for (const item of body) {
+        const cloned = cloneWorkoutItemWithNewId(item);
+        flat.push({ ...cloned, circuitNum: circuit.circuitNumber });
+      }
+      if (
+        r < loops - 1 &&
+        betweenLoopsSec > 0
+      ) {
+        const restBetweenLoops: RestWorkoutItem = {
+          id: generateId(),
+          type: "rest",
+          duration: betweenLoopsSec,
+        };
+        flat.push({ ...restBetweenLoops, circuitNum: circuit.circuitNumber });
+      }
+    }
+    if (circuitRest) {
+      const cr = cloneWorkoutItemWithNewId(circuitRest) as RestWorkoutItem;
+      flat.push({ ...cr, circuitNum: circuit.circuitNumber });
+    }
+  }
+  return flat;
+}
+
+/** Recompute total duration from stored circuits (after loopCount edits). */
+export function recalculatePlanDuration(plan: WorkoutPlan): number {
+  let total = 0;
+  const rb = plan.options.restBetweenCircuits;
+  for (let ci = 0; ci < plan.circuits.length; ci++) {
+    const c = plan.circuits[ci];
+    const hasRestBetweenNext = ci < plan.circuits.length - 1;
+    const { body, circuitRest } = splitCircuitBodyAndRest(c, hasRestBetweenNext);
+    const loops = clampLoopCount(c.loopCount);
+    for (const item of body) {
+      total += estimatedItemSeconds(item, plan.options) * loops;
+    }
+    if (loops > 1 && rb > 0) {
+      total += (loops - 1) * rb;
+    }
+    if (circuitRest) {
+      total += circuitRest.duration;
+    }
+  }
+  return total;
+}
+
+/**
+ * Build a plan from ordered exercise lists per circuit (empty circuits are skipped).
+ */
+export function buildWorkoutPlanFromCircuitLists(
+  circuitLists: Exercise[][],
+  timing: CustomWorkoutTimingInput,
+  opts?: BuildCircuitListsOptions
+): WorkoutPlan {
+  const nonEmpty: Exercise[][] = [];
+  const loopCountsAligned: number[] = [];
+  for (let i = 0; i < circuitLists.length; i++) {
+    if (circuitLists[i].length > 0) {
+      nonEmpty.push(circuitLists[i]);
+      loopCountsAligned.push(clampLoopCount(opts?.circuitLoopCounts?.[i]));
+    }
+  }
+  if (nonEmpty.length === 0) {
+    throw new Error("Add at least one exercise to your workout.");
+  }
+  const flatExercises = nonEmpty.flat();
+  const muscles = getUniqueMusclesFromExercises(flatExercises);
+  const maxPerCircuit = Math.max(...nonEmpty.map((c) => c.length));
+
+  const options: SetupOptions = {
+    mode: timing.mode,
+    muscles,
+    circuits: nonEmpty.length,
+    exercisesPerCircuit: maxPerCircuit,
+    workInterval: timing.workInterval,
+    restBetweenExercises: timing.restBetweenExercises,
+    restBetweenCircuits: timing.restBetweenCircuits,
+    repDifficulty: timing.repDifficulty ?? 50,
+    exerciseSourceMode: "catalog",
+  };
+
+  const circuits: Circuit[] = [];
+  let totalSeconds = 0;
+
+  for (let c = 0; c < nonEmpty.length; c++) {
+    const list = nonEmpty[c];
+    const loopN = loopCountsAligned[c] ?? 1;
+    const circuitItems: (ExerciseWorkoutItem | RestWorkoutItem)[] = [];
+    let circuitBodySeconds = 0;
+    for (let e = 0; e < list.length; e++) {
+      const ex = list[e];
+      circuitBodySeconds += estimatedExerciseSeconds(ex, options);
+      circuitItems.push({
+        id: generateId(),
+        type: "exercise",
+        exercise: ex,
+        targetReps: targetRepsForMode(ex, options),
+        targetTime: targetTimeForMode(ex, options),
+      });
+      if (e < list.length - 1 && options.restBetweenExercises > 0) {
+        circuitItems.push({
+          id: generateId(),
+          type: "rest",
+          duration: options.restBetweenExercises,
+        });
+        circuitBodySeconds += options.restBetweenExercises;
+      }
+    }
+    let circuitRestSeconds = 0;
+    if (c < nonEmpty.length - 1) {
+      circuitRestSeconds = options.restBetweenCircuits;
+      circuitItems.push({
+        id: generateId(),
+        type: "rest",
+        duration: options.restBetweenCircuits,
+        isCircuitRest: true,
+      });
+    }
+    const betweenLoopRestSeconds =
+      loopN > 1 && options.restBetweenCircuits > 0
+        ? (loopN - 1) * options.restBetweenCircuits
+        : 0;
+    totalSeconds +=
+      circuitBodySeconds * loopN + betweenLoopRestSeconds + circuitRestSeconds;
+    circuits.push({
+      id: generateId(),
+      circuitNumber: c + 1,
+      items: circuitItems,
+      loopCount: loopN,
+    });
+  }
+
+  const strictKeys = [...new Set(flatExercises.map((e) => e.exercise))];
+
+  return {
+    options,
+    circuits,
+    estimatedDurationSeconds: totalSeconds,
+    tags: generateTags(options.muscles),
+    strictPoolExerciseKeys: strictKeys,
+  };
+}
+
+export function buildWorkoutPlanFromOrderedExercises(
+  ordered: Exercise[],
+  timing: CustomWorkoutTimingInput
+): WorkoutPlan {
+  return buildWorkoutPlanFromCircuitLists([ordered], timing);
 }
 
 function exercisesFromStrictKeys(keys: string[] | undefined): Exercise[] {

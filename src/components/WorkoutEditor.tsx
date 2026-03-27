@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { WorkoutPlan } from '../types';
-import { Save, X, RefreshCw, Star } from 'lucide-react';
-import { rerollExercise } from '../utils/workoutGenerator';
-import { isFavoriteExercise, toggleFavoriteExercise } from '../storage/workoutLibraryStorage';
-import { cn } from '../lib/utils';
+import { Save, X, RefreshCw } from 'lucide-react';
+import { clampLoopCount, rerollExercise } from '../utils/workoutGenerator';
 import { playSound } from '../audio/playSfx';
 import { SOUNDS } from '../audio/soundManifest';
 import { isBilateralHold, isHoldExercise } from '../utils/repDifficulty';
@@ -16,7 +14,6 @@ interface Props {
 
 export default function WorkoutEditor({ plan: initialPlan, onSave, onCancel }: Props) {
   const [draftPlan, setDraftPlan] = useState<WorkoutPlan>(initialPlan);
-  const [, bumpFavoriteUi] = useState(0);
 
   const formatTargetLabel = (exItem: any) => {
     if (draftPlan.options.mode === 'time-attack') {
@@ -55,8 +52,13 @@ export default function WorkoutEditor({ plan: initialPlan, onSave, onCancel }: P
       <div className="space-y-8">
         {draftPlan.circuits.map((circuit) => (
           <div key={circuit.id} className="arcade-card p-6 rounded-xl border-secondary/30">
-            <h3 className="text-xl font-display text-secondary mb-4 uppercase tracking-widest">
+            <h3 className="text-xl font-display text-secondary mb-4 uppercase tracking-widest flex items-center gap-2 flex-wrap">
               Circuit {circuit.circuitNumber}
+              {clampLoopCount(circuit.loopCount) > 1 ? (
+                <span className="font-mono text-sm text-muted-foreground tabular-nums">
+                  ×{clampLoopCount(circuit.loopCount)}
+                </span>
+              ) : null}
             </h3>
             
             <div className="space-y-3">
@@ -65,7 +67,6 @@ export default function WorkoutEditor({ plan: initialPlan, onSave, onCancel }: P
                 const exItem = item as any;
                 
                 const exName = exItem.exercise.exercise;
-                const starred = isFavoriteExercise(exName);
 
                 return (
                   <div key={item.id} className="bg-background border border-border p-3 rounded-lg flex items-center justify-between group hover:border-primary/50 transition-colors gap-2">
@@ -77,24 +78,6 @@ export default function WorkoutEditor({ plan: initialPlan, onSave, onCancel }: P
                     </div>
 
                     <div className="flex items-center gap-1 shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          playSound(SOUNDS.uiSelect);
-                          toggleFavoriteExercise(exName);
-                          bumpFavoriteUi((t) => t + 1);
-                        }}
-                        className={cn(
-                          'p-3 rounded transition-colors',
-                          starred
-                            ? 'text-accent bg-accent/15 border border-accent/40'
-                            : 'text-muted-foreground hover:text-accent border border-transparent'
-                        )}
-                        title={starred ? 'Remove from favorites' : 'Favorite exercise'}
-                        aria-label="Toggle favorite"
-                      >
-                        <Star size={20} className={starred ? 'fill-current' : ''} />
-                      </button>
                       <button
                         type="button"
                         onClick={() => handleReroll(circuit.id, item.id)}

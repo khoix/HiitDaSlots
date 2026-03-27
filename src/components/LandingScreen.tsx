@@ -17,6 +17,7 @@ interface Props {
   onOpenCatalog?: () => void;
   onOpenSavedWorkouts?: () => void;
   onOpenFavoriteExercises?: () => void;
+  onOpenWorkoutBuilder?: () => void;
 }
 
 type PrecacheState = 'loading' | 'success' | 'error';
@@ -27,6 +28,7 @@ export default function LandingScreen({
   onOpenCatalog,
   onOpenSavedWorkouts,
   onOpenFavoriteExercises,
+  onOpenWorkoutBuilder,
 }: Props) {
   const [precacheState, setPrecacheState] = useState<PrecacheState>('loading');
   const [completedCount, setCompletedCount] = useState(0);
@@ -213,7 +215,8 @@ export default function LandingScreen({
       (onOpenHistory ||
         onOpenCatalog ||
         onOpenSavedWorkouts ||
-        onOpenFavoriteExercises) ? (
+        onOpenFavoriteExercises ||
+        onOpenWorkoutBuilder) ? (
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 max-w-sm mx-auto">
           {onOpenCatalog ? (
             <button
@@ -226,19 +229,6 @@ export default function LandingScreen({
               className="font-display uppercase tracking-widest text-muted-foreground hover:text-primary text-[0.65rem] transition-colors"
             >
               Catalog
-            </button>
-          ) : null}
-          {onOpenHistory ? (
-            <button
-              type="button"
-              onClick={() => {
-                void resumeAudioContext().catch(() => {});
-                playSound(SOUNDS.uiSelect);
-                onOpenHistory();
-              }}
-              className="font-display uppercase tracking-widest text-muted-foreground hover:text-secondary text-[0.65rem] transition-colors"
-            >
-              History
             </button>
           ) : null}
           {onOpenSavedWorkouts ? (
@@ -265,6 +255,32 @@ export default function LandingScreen({
               className="font-display uppercase tracking-widest text-muted-foreground hover:text-accent text-[0.65rem] transition-colors"
             >
               Favorites
+            </button>
+          ) : null}
+          {onOpenWorkoutBuilder ? (
+            <button
+              type="button"
+              onClick={() => {
+                void resumeAudioContext().catch(() => {});
+                playSound(SOUNDS.uiSelect);
+                onOpenWorkoutBuilder();
+              }}
+              className="font-display uppercase tracking-widest text-muted-foreground hover:text-primary text-[0.65rem] transition-colors"
+            >
+              Builder
+            </button>
+          ) : null}
+          {onOpenHistory ? (
+            <button
+              type="button"
+              onClick={() => {
+                void resumeAudioContext().catch(() => {});
+                playSound(SOUNDS.uiSelect);
+                onOpenHistory();
+              }}
+              className="font-display uppercase tracking-widest text-muted-foreground hover:text-secondary text-[0.65rem] transition-colors"
+            >
+              History
             </button>
           ) : null}
         </div>
