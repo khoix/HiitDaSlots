@@ -39,6 +39,7 @@ import { generateId } from "../utils/random";
 import { playSound } from "../audio/playSfx";
 import { SOUNDS } from "../audio/soundManifest";
 import { cn } from "../lib/utils";
+import { repDifficultyLabel } from "../utils/repDifficulty";
 import CatalogExerciseCard from "./CatalogExerciseCard";
 import ExerciseLibraryRolodex from "./exerciseLibrary/ExerciseLibraryRolodex";
 import SaveWorkoutNameModal from "./SaveWorkoutNameModal";
@@ -120,12 +121,12 @@ function CircuitDropZone({
         "rounded-lg border border-dashed px-2 py-3 transition-colors",
         empty
           ? "min-h-[4rem] border-primary/40 bg-primary/5"
-          : "min-h-[2.75rem] mt-2 border-border/50 bg-black/10",
+          : "min-h-[2.75rem] mb-2 border-border/50 bg-black/10",
         isOver && "border-primary/60 bg-primary/10"
       )}
     >
       <p className="text-center text-xs font-sans text-muted-foreground">
-        Drop exercises here
+        {empty ? "Drop exercises here" : "Drop to add at start"}
       </p>
     </div>
   );
@@ -361,6 +362,15 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
       appendItem(circuitIndex, item);
     };
 
+    const insertAtStart = (circuitIndex: number, item: QueuedItem) => {
+      setCircuits((prev) => {
+        const next = prev.map((c) => [...c]);
+        if (!next[circuitIndex]) return prev;
+        next[circuitIndex] = [item, ...next[circuitIndex]];
+        return next;
+      });
+    };
+
     /** Drag from library — only explicit drop zones (not queue rows / strip). */
     if (aid.startsWith("lib|")) {
       const key = parseLibId(aid);
@@ -381,7 +391,7 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
 
       const dropCi = parseDropId(oid);
       if (dropCi !== null) {
-        insertAtEnd(dropCi, newItem);
+        insertAtStart(dropCi, newItem);
         playSound(SOUNDS.uiConfirm);
         return;
       }
@@ -401,7 +411,7 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
 
       const dropCi = parseDropId(oid);
       if (dropCi !== null) {
-        next[dropCi].push(moved);
+        next[dropCi].unshift(moved);
         return next;
       }
       const dropEndCi = parseDropEndId(oid);
@@ -627,9 +637,9 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
                 <Layers size={16} /> Circuits
               </h2>
               <p className="hidden md:block text-xs font-sans text-muted-foreground mb-3">
-                Drop library cards on “Drop exercises here” to add to a circuit, or on “+ Add
-                circuit” to create a new circuit with that exercise. Reorder queue items with the
-                grip handle.
+                Top zone adds at the start of the circuit; the thin strip after the list adds at the
+                end. Or drop on “+ Add circuit” to create a new circuit. Reorder with the grip
+                handle.
               </p>
               <div className="space-y-3 max-h-[min(50dvh,24rem)] overflow-y-auto pr-1">
                 {circuits.map((circuit, ci) => (
@@ -673,6 +683,7 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
                         strategy={verticalListSortingStrategy}
                       >
                         <div className="space-y-2">
+                          <CircuitDropZone circuitIndex={ci} empty={false} />
                           {circuit.map((q) => (
                             <SortableQueueRow
                               key={q.instanceId}
@@ -682,7 +693,6 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
                             />
                           ))}
                           <CircuitDropEndZone circuitIndex={ci} />
-                          <CircuitDropZone circuitIndex={ci} empty={false} />
                         </div>
                       </SortableContext>
                     )}
@@ -692,11 +702,11 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
               <AddCircuitDropButton onClick={addCircuit} />
             </div>
 
-            <div className="arcade-card rounded-xl p-4 border border-border/80 shrink-0 space-y-3">
+            <div className="arcade-card rounded-xl p-4 border border-border/80 shrink-0 space-y-4">
               <h2 className="font-display text-sm uppercase tracking-widest text-muted-foreground">
                 Workout details
               </h2>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full">
                 <button
                   type="button"
                   onClick={() => {
@@ -704,7 +714,7 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
                     setMode("time-attack");
                   }}
                   className={cn(
-                    "px-3 py-1.5 rounded-lg text-xs font-display uppercase tracking-widest border",
+                    "w-full sm:w-auto flex justify-center items-center px-3 py-2 rounded-lg text-xs font-display uppercase tracking-widest border text-center",
                     mode === "time-attack"
                       ? "border-primary bg-primary/15 text-primary"
                       : "border-border text-muted-foreground"
@@ -719,7 +729,7 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
                     setMode("rep-quest");
                   }}
                   className={cn(
-                    "px-3 py-1.5 rounded-lg text-xs font-display uppercase tracking-widest border",
+                    "w-full sm:w-auto flex justify-center items-center px-3 py-2 rounded-lg text-xs font-display uppercase tracking-widest border text-center",
                     mode === "rep-quest"
                       ? "border-primary bg-primary/15 text-primary"
                       : "border-border text-muted-foreground"
@@ -728,74 +738,91 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
                   Rep quest
                 </button>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm font-sans">
-                <label className="space-y-1">
-                  <span className="text-[0.65rem] uppercase font-display text-muted-foreground">
-                    Work (sec)
-                  </span>
-                  <input
-                    type="number"
-                    min={5}
-                    max={600}
-                    value={workInterval}
-                    onChange={(e) =>
-                      setWorkInterval(Number(e.target.value) || 45)
-                    }
-                    className="w-full rounded-lg border border-border bg-background px-2 py-1.5"
-                  />
-                </label>
-                <label className="space-y-1">
-                  <span className="text-[0.65rem] uppercase font-display text-muted-foreground">
-                    Rest between moves (sec)
-                  </span>
-                  <input
-                    type="number"
-                    min={0}
-                    max={300}
-                    value={restBetweenExercises}
-                    onChange={(e) =>
-                      setRestBetweenExercises(Number(e.target.value) || 0)
-                    }
-                    className="w-full rounded-lg border border-border bg-background px-2 py-1.5"
-                  />
-                </label>
-                <label className="space-y-1">
-                  <span className="text-[0.65rem] uppercase font-display text-muted-foreground">
-                    Rest between circuits (sec)
-                  </span>
-                  <input
-                    type="number"
-                    min={0}
-                    max={600}
-                    value={restBetweenCircuits}
-                    onChange={(e) =>
-                      setRestBetweenCircuits(Number(e.target.value) || 0)
-                    }
-                    className="w-full rounded-lg border border-border bg-background px-2 py-1.5"
-                  />
-                </label>
-                {mode === "rep-quest" ? (
-                  <label className="space-y-1 sm:col-span-2">
-                    <span className="text-[0.65rem] uppercase font-display text-muted-foreground">
-                      Rep difficulty (0–100)
-                    </span>
+              <div className="space-y-5 max-w-md">
+                {mode === "time-attack" ? (
+                  <div>
+                    <label className="flex justify-between text-sm uppercase font-bold text-secondary mb-2">
+                      <span>Work interval (sec)</span>
+                      <span className="text-foreground tabular-nums">
+                        {workInterval}s
+                      </span>
+                    </label>
                     <input
-                      type="number"
+                      type="range"
+                      min={20}
+                      max={90}
+                      step={5}
+                      value={workInterval}
+                      onChange={(e) =>
+                        setWorkInterval(parseInt(e.target.value, 10))
+                      }
+                      className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer"
+                    />
+                  </div>
+                ) : null}
+                {mode === "rep-quest" ? (
+                  <div>
+                    <label className="flex justify-between text-sm uppercase font-bold text-secondary mb-2">
+                      <span>Difficulty (target reps)</span>
+                      <span className="text-foreground tabular-nums">
+                        {repDifficultyLabel(repDifficulty)}
+                      </span>
+                    </label>
+                    <div className="flex justify-between text-xs text-muted-foreground uppercase tracking-wider mb-1">
+                      <span>Fewer reps</span>
+                      <span>More reps</span>
+                    </div>
+                    <input
+                      type="range"
                       min={0}
                       max={100}
+                      step={5}
                       value={repDifficulty}
                       onChange={(e) =>
-                        setRepDifficulty(
-                          Math.min(
-                            100,
-                            Math.max(0, Number(e.target.value) || 0)
-                          )
-                        )
+                        setRepDifficulty(parseInt(e.target.value, 10))
                       }
-                      className="w-full rounded-lg border border-border bg-background px-2 py-1.5"
+                      className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer accent-secondary"
                     />
-                  </label>
+                  </div>
                 ) : null}
+                <div>
+                  <label className="flex justify-between text-sm uppercase font-bold text-secondary mb-2">
+                    <span>Rest between exercises (sec)</span>
+                    <span className="text-foreground tabular-nums">
+                      {restBetweenExercises}s
+                    </span>
+                  </label>
+                  <input
+                    type="range"
+                    min={0}
+                    max={60}
+                    step={5}
+                    value={restBetweenExercises}
+                    onChange={(e) =>
+                      setRestBetweenExercises(parseInt(e.target.value, 10))
+                    }
+                    className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+                <div>
+                  <label className="flex justify-between text-sm uppercase font-bold text-accent mb-2">
+                    <span>Rest between circuits (sec)</span>
+                    <span className="text-foreground tabular-nums">
+                      {restBetweenCircuits}s
+                    </span>
+                  </label>
+                  <input
+                    type="range"
+                    min={30}
+                    max={180}
+                    step={15}
+                    value={restBetweenCircuits}
+                    onChange={(e) =>
+                      setRestBetweenCircuits(parseInt(e.target.value, 10))
+                    }
+                    className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
               </div>
             </div>
           </div>

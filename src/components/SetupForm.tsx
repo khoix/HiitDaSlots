@@ -15,18 +15,11 @@ import { cn } from "../lib/utils";
 import { playSound } from "../audio/playSfx";
 import { SOUNDS } from "../audio/soundManifest";
 import ExercisePoolReel from "./ExercisePoolReel";
+import { repDifficultyLabel } from "../utils/repDifficulty";
 
 interface Props {
   onComplete: (options: SetupOptions) => void;
   onCancel?: () => void;
-}
-
-function repDifficultyLabel(value: number): string {
-  if (value === 0) return "Easiest";
-  if (value === 100) return "Hardest";
-  if (value <= 33) return "Easier";
-  if (value >= 67) return "Harder";
-  return "Standard";
 }
 
 function isCatalogMode(mode: ExerciseSourceMode): mode is "catalog" {

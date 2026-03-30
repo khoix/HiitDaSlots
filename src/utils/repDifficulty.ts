@@ -68,3 +68,12 @@ export function scaleHoldSecondsFromInterval(
   const highBound = match[3].toLowerCase() === 'min' ? high * 60 : high;
   return Math.min(highBound, Math.max(lowBound, rounded));
 }
+
+/** Short label for rep-quest difficulty slider (0–100). */
+export function repDifficultyLabel(value: number): string {
+  if (value === 0) return "Easiest";
+  if (value === 100) return "Hardest";
+  if (value <= 33) return "Easier";
+  if (value >= 67) return "Harder";
+  return "Standard";
+}

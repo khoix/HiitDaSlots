@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { ArrowLeft, Trash2, Play } from "lucide-react";
+import { ArrowLeft, Trash2, Play, Pencil } from "lucide-react";
 import {
   loadWorkoutLibrary,
   updateSavedWorkoutMetadata,
@@ -9,11 +9,29 @@ import type { SavedWorkoutEntry } from "../types";
 import { playSound } from "../audio/playSfx";
 import { SOUNDS } from "../audio/soundManifest";
 import SaveWorkoutNameModal from "./SaveWorkoutNameModal";
+import { clampLoopCount } from "../utils/workoutGenerator";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog";
 
 interface Props {
   onBack: () => void;
   onReplay: (entry: SavedWorkoutEntry) => void;
   onOpenBuilder?: () => void;
+}
+
+function formatCircuitRoundsLine(entry: SavedWorkoutEntry): string {
+  const parts = entry.plan.circuits.map(
+    (c, i) => `C${i + 1} ×${clampLoopCount(c.loopCount)}`
+  );
+  return parts.join(" · ");
 }
 
 export default function SavedWorkoutsScreen({
@@ -23,6 +41,7 @@ export default function SavedWorkoutsScreen({
 }: Props) {
   const [lib, setLib] = useState(() => loadWorkoutLibrary());
   const [renameId, setRenameId] = useState<string | null>(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const refresh = () => setLib(loadWorkoutLibrary());
 
@@ -35,6 +54,10 @@ export default function SavedWorkoutsScreen({
   );
 
   const renameEntry = entries.find((e) => e.id === renameId);
+  const deleteEntry = entries.find((e) => e.id === deleteConfirmId);
+
+  const iconBtnClass =
+    "p-2 text-muted-foreground hover:text-foreground rounded-lg border border-border shrink-0";
 
   return (
     <div className="flex flex-1 flex-col min-h-0 w-full max-w-2xl mx-auto px-4 py-8 pb-24">
@@ -93,28 +116,33 @@ export default function SavedWorkoutsScreen({
           {entries.map((entry) => (
             <li
               key={entry.id}
-              className="arcade-card rounded-xl p-4 border border-border/80 flex flex-wrap items-center justify-between gap-4"
+              className="arcade-card rounded-xl p-4 border border-border/80 flex items-start justify-between gap-3"
             >
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="font-display text-lg text-foreground truncate">
                   {entry.name}
                 </p>
-                <p className="text-xs text-muted-foreground font-sans">
+                <p className="text-xs text-muted-foreground font-sans mt-0.5">
                   {new Date(entry.addedAtIso).toLocaleString()} ·{" "}
                   {entry.plan.options.mode} · {entry.plan.circuits.length}{" "}
                   circuits
                 </p>
+                <p className="text-xs text-muted-foreground/90 font-sans mt-1">
+                  {formatCircuitRoundsLine(entry)}
+                </p>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex items-center gap-1 shrink-0">
                 <button
                   type="button"
                   onClick={() => {
                     playSound(SOUNDS.uiSelect);
                     setRenameId(entry.id);
                   }}
-                  className="px-3 py-1.5 rounded-lg text-xs border border-border text-muted-foreground hover:text-foreground"
+                  className={iconBtnClass}
+                  title="Rename"
+                  aria-label="Rename workout"
                 >
-                  Rename
+                  <Pencil size={18} />
                 </button>
                 <button
                   type="button"
@@ -122,19 +150,21 @@ export default function SavedWorkoutsScreen({
                     playSound(SOUNDS.uiConfirm);
                     onReplay(entry);
                   }}
-                  className="arcade-btn-primary px-3 py-1.5 rounded-lg text-xs flex items-center gap-1"
+                  className="p-2 rounded-lg border border-primary/40 text-primary hover:bg-primary/10 shrink-0"
+                  title="Play"
+                  aria-label="Play workout"
                 >
-                  <Play size={14} /> Play
+                  <Play size={18} />
                 </button>
                 <button
                   type="button"
                   onClick={() => {
-                    playSound(SOUNDS.uiCancel);
-                    removeSavedWorkout(entry.id);
-                    refresh();
+                    playSound(SOUNDS.uiSelect);
+                    setDeleteConfirmId(entry.id);
                   }}
-                  className="p-2 text-destructive/80 hover:text-destructive rounded-lg border border-destructive/30"
-                  aria-label="Delete"
+                  className="p-2 text-destructive/80 hover:text-destructive rounded-lg border border-destructive/30 shrink-0"
+                  title="Delete"
+                  aria-label="Delete workout"
                 >
                   <Trash2 size={18} />
                 </button>
@@ -143,6 +173,44 @@ export default function SavedWorkoutsScreen({
           ))}
         </ul>
       )}
+
+      <AlertDialog
+        open={!!deleteConfirmId}
+        onOpenChange={(open) => {
+          if (!open) setDeleteConfirmId(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete saved workout?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {deleteEntry
+                ? `“${deleteEntry.name}” will be removed from your saved presets. This cannot be undone.`
+                : "This preset will be removed. This cannot be undone."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => playSound(SOUNDS.uiCancel)}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (deleteConfirmId) {
+                  playSound(SOUNDS.uiConfirm);
+                  removeSavedWorkout(deleteConfirmId);
+                  refresh();
+                }
+                setDeleteConfirmId(null);
+              }}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <SaveWorkoutNameModal
         open={!!renameEntry}

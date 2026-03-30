@@ -15,6 +15,8 @@ export interface CatalogExerciseCardProps {
   onEdit?: () => void;
   /** When false, hides the catalog edit (wrench) control. */
   showEdit?: boolean;
+  /** When false, hides the favorite star control. */
+  showFavoriteToggle?: boolean;
   className?: string;
   /** Optional drag affordance (e.g. dnd-kit listeners on a handle or whole card). */
   dragProps?: React.HTMLAttributes<HTMLElement>;
@@ -29,6 +31,7 @@ export default function CatalogExerciseCard({
   onToggleFavorite,
   onEdit,
   showEdit = true,
+  showFavoriteToggle = true,
   className,
   dragProps,
   dragRef,
@@ -65,21 +68,23 @@ export default function CatalogExerciseCard({
               <Wrench size={20} />
             </button>
           ) : null}
-          <button
-            type="button"
-            onClick={onToggleFavorite}
-            className={cn(
-              "p-2 rounded-lg shrink-0 transition-colors border",
-              starred
-                ? "text-accent bg-accent/15 border-accent/40"
-                : "text-muted-foreground hover:text-accent border-border/60 hover:border-accent/30"
-            )}
-            title={starred ? "Remove from favorites" : "Favorite exercise"}
-            aria-label="Toggle favorite"
-            aria-pressed={starred}
-          >
-            <Star size={20} className={starred ? "fill-current" : ""} />
-          </button>
+          {showFavoriteToggle ? (
+            <button
+              type="button"
+              onClick={onToggleFavorite}
+              className={cn(
+                "p-2 rounded-lg shrink-0 transition-colors border",
+                starred
+                  ? "text-accent bg-accent/15 border-accent/40"
+                  : "text-muted-foreground hover:text-accent border-border/60 hover:border-accent/30"
+              )}
+              title={starred ? "Remove from favorites" : "Favorite exercise"}
+              aria-label="Toggle favorite"
+              aria-pressed={starred}
+            >
+              <Star size={20} className={starred ? "fill-current" : ""} />
+            </button>
+          ) : null}
         </div>
       </div>
       <p className="text-sm text-muted-foreground font-sans leading-relaxed mb-3">

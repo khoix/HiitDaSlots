@@ -10,6 +10,7 @@ import {
   playSoundsTogether,
   resumeAudioContext,
 } from '@/audio/playSfx';
+import { precacheSounds } from '@/audio/precacheSounds';
 
 interface Props {
   onStart: () => void;
@@ -57,15 +58,13 @@ export default function LandingScreen({
 
     (async () => {
       try {
-        await Promise.all(
-          PRECACHE_SOUND_URLS.map(async (url) => {
-            const res = await fetch(url, { signal });
-            if (!res.ok) {
-              throw new Error(`Failed to load ${url} (${res.status})`);
-            }
+        await precacheSounds({
+          urls: PRECACHE_SOUND_URLS,
+          signal,
+          onProgress: () => {
             setCompletedCount((c) => c + 1);
-          })
-        );
+          },
+        });
         setPrecacheState('success');
       } catch (e) {
         if (signal.aborted) return;
