@@ -5,22 +5,40 @@ import { openDemoLink, hasDemoLink } from '../utils/openDemo';
 import { Play, Edit2, RotateCcw, Clock, Zap, ExternalLink, Home, BookmarkPlus, Star } from 'lucide-react';
 import WorkoutEditor from './WorkoutEditor';
 import SaveWorkoutNameModal from './SaveWorkoutNameModal';
-import { addSavedWorkout, isFavoriteExercise, toggleFavoriteExercise } from '../storage/workoutLibraryStorage';
+import {
+  addSavedWorkout,
+  isFavoriteExercise,
+  loadWorkoutLibrary,
+  toggleFavoriteExercise,
+  updateSavedWorkoutPlan,
+} from '../storage/workoutLibraryStorage';
 import { playSound } from '../audio/playSfx';
 import { SOUNDS } from '../audio/soundManifest';
 import { isBilateralHold, isHoldExercise } from '../utils/repDifficulty';
 import CircuitLoopMultiplier from './CircuitLoopMultiplier';
-import { clampLoopCount, recalculatePlanDuration } from '../utils/workoutGenerator';
+import { clampLoopCount, recalculatePlanDuration } from '../utils/workoutPlanRuntime';
 
 interface Props {
   plan: WorkoutPlan;
+  savedWorkoutId?: string | null;
+  savedWorkoutName?: string | null;
+  onSavedWorkoutLinked?: (id: string | null) => void;
   onStart: () => void;
   onRegenerate: () => void;
   onUpdatePlan: (newPlan: WorkoutPlan) => void;
   onStartOver: () => void;
 }
 
-export default function WorkoutReadyScreen({ plan, onStart, onRegenerate, onUpdatePlan, onStartOver }: Props) {
+export default function WorkoutReadyScreen({
+  plan,
+  savedWorkoutId,
+  savedWorkoutName,
+  onSavedWorkoutLinked,
+  onStart,
+  onRegenerate,
+  onUpdatePlan,
+  onStartOver,
+}: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState<ExerciseWorkoutItem | null>(null);
@@ -93,7 +111,7 @@ export default function WorkoutReadyScreen({ plan, onStart, onRegenerate, onUpda
         <div className="relative z-10">
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-4">
-            {plan.tags.map(tag => (
+            {(savedWorkoutName ? [savedWorkoutName] : plan.tags).map(tag => (
               <span
                 key={tag}
                 className="px-3 py-1 rounded-full font-display uppercase text-secondary border border-secondary/50"
@@ -284,6 +302,14 @@ export default function WorkoutReadyScreen({ plan, onStart, onRegenerate, onUpda
             type="button"
             onClick={() => {
               playSound(SOUNDS.uiSelect);
+              if (savedWorkoutId) {
+                const exists = loadWorkoutLibrary().savedWorkouts.some((entry) => entry.id === savedWorkoutId);
+                if (exists) {
+                  updateSavedWorkoutPlan(savedWorkoutId, plan);
+                  return;
+                }
+                onSavedWorkoutLinked?.(null);
+              }
               setSaveModalOpen(true);
             }}
             className="workout-action-ghost flex flex-1 min-w-0 sm:flex-initial items-center justify-center gap-1 sm:gap-1.5"
@@ -328,7 +354,8 @@ export default function WorkoutReadyScreen({ plan, onStart, onRegenerate, onUpda
         onClose={() => setSaveModalOpen(false)}
         onConfirm={(name) => {
           try {
-            addSavedWorkout(name, plan);
+            const saved = addSavedWorkout(name, plan);
+            onSavedWorkoutLinked?.(saved.id);
           } catch {
             /* ignore */
           }

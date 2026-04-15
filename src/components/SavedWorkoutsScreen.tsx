@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { ArrowLeft, Trash2, Play, Pencil } from "lucide-react";
+import { ArrowLeft, Trash2, Play, Pencil, ArrowRight } from "lucide-react";
 import {
   loadWorkoutLibrary,
   updateSavedWorkoutMetadata,
@@ -9,7 +9,6 @@ import type { SavedWorkoutEntry } from "../types";
 import { playSound } from "../audio/playSfx";
 import { SOUNDS } from "../audio/soundManifest";
 import SaveWorkoutNameModal from "./SaveWorkoutNameModal";
-import { clampLoopCount } from "../utils/workoutGenerator";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,11 +26,140 @@ interface Props {
   onOpenBuilder?: () => void;
 }
 
-function formatCircuitRoundsLine(entry: SavedWorkoutEntry): string {
-  const parts = entry.plan.circuits.map(
-    (c, i) => `C${i + 1} ×${clampLoopCount(c.loopCount)}`
-  );
-  return parts.join(" · ");
+function formatDuration(totalSeconds: number): string {
+  const minutes = Math.max(0, Math.round(totalSeconds / 60));
+  if (minutes < 60) return `${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  const rem = minutes % 60;
+  return rem > 0 ? `${hours}h ${rem}m` : `${hours}h`;
+}
+
+function estimateLineWidth(text: string): number {
+  let width = 0;
+  for (const ch of text) {
+    if ("ilIjtfr".includes(ch)) {
+      width += 0.55;
+    } else if ("mwMW@#%&".includes(ch)) {
+      width += 1.35;
+    } else if (ch === " ") {
+      width += 0.35;
+    } else {
+      width += 1;
+    }
+  }
+  return width;
+}
+
+function buildLineLayouts(tokens: string[], lineCount: number): string[][] {
+  const results: string[][] = [];
+  if (lineCount <= 0 || lineCount > tokens.length) return results;
+
+  const split = (start: number, linesLeft: number, built: string[]) => {
+    if (linesLeft === 1) {
+      built.push(tokens.slice(start).join(" "));
+      results.push([...built]);
+      built.pop();
+      return;
+    }
+    const maxEnd = tokens.length - linesLeft;
+    for (let end = start; end <= maxEnd; end++) {
+      built.push(tokens.slice(start, end + 1).join(" "));
+      split(end + 1, linesLeft - 1, built);
+      built.pop();
+    }
+  };
+
+  split(0, lineCount, []);
+  return results;
+}
+
+function scoreLayout(lines: string[]): { maxWidth: number; variance: number } {
+  const widths = lines.map(estimateLineWidth);
+  const maxWidth = Math.max(...widths);
+  const minWidth = Math.min(...widths);
+  return { maxWidth, variance: maxWidth - minWidth };
+}
+
+function maybeCompactPairs(words: string[]): string[][] {
+  const out: string[][] = [words];
+  const compactable = new Set([
+    "knee drive",
+    "toe touch",
+    "high knee",
+    "side plank",
+  ]);
+  for (let i = 0; i < words.length - 1; i++) {
+    const key = `${words[i].toLowerCase()} ${words[i + 1].toLowerCase()}`;
+    if (!compactable.has(key)) continue;
+    const compacted = [
+      ...words.slice(0, i),
+      `${words[i]}${words[i + 1]}`,
+      ...words.slice(i + 2),
+    ];
+    out.push(compacted);
+  }
+  return out;
+}
+
+function formatExerciseChipLabel(name: string): string {
+  const trimmed = name.trim().replace(/\s+/g, " ");
+  const words = trimmed.split(" ").filter(Boolean);
+  if (words.length <= 1) return trimmed;
+  if (words.length === 2) return `${words[0]}\n${words[1]}`;
+
+  const variants = maybeCompactPairs(words);
+  let bestChoice: {
+    lines: string[];
+    maxWidth: number;
+    lineCount: number;
+    variance: number;
+  } | null = null;
+
+  for (const tokens of variants) {
+    const twoLineLayouts = buildLineLayouts(tokens, 2);
+    for (const lines of twoLineLayouts) {
+      const score = scoreLayout(lines);
+      const candidate = {
+        lines,
+        maxWidth: score.maxWidth,
+        lineCount: 2,
+        variance: score.variance,
+      };
+      if (
+        !bestChoice ||
+        candidate.maxWidth < bestChoice.maxWidth ||
+        (candidate.maxWidth === bestChoice.maxWidth &&
+          (candidate.lineCount < bestChoice.lineCount ||
+            (candidate.lineCount === bestChoice.lineCount &&
+              candidate.variance < bestChoice.variance)))
+      ) {
+        bestChoice = candidate;
+      }
+    }
+
+    if (tokens.length >= 5) {
+      const threeLineLayouts = buildLineLayouts(tokens, 3);
+      for (const lines of threeLineLayouts) {
+        const score = scoreLayout(lines);
+        const candidate = {
+          lines,
+          maxWidth: score.maxWidth,
+          lineCount: 3,
+          variance: score.variance,
+        };
+        if (
+          !bestChoice ||
+          candidate.maxWidth + 0.9 < bestChoice.maxWidth ||
+          (candidate.maxWidth === bestChoice.maxWidth &&
+            candidate.lineCount < bestChoice.lineCount)
+        ) {
+          bestChoice = candidate;
+        }
+      }
+    }
+  }
+
+  return bestChoice ? bestChoice.lines.join("\n") : trimmed;
 }
 
 export default function SavedWorkoutsScreen({
@@ -42,6 +170,7 @@ export default function SavedWorkoutsScreen({
   const [lib, setLib] = useState(() => loadWorkoutLibrary());
   const [renameId, setRenameId] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [detailEntry, setDetailEntry] = useState<SavedWorkoutEntry | null>(null);
 
   const refresh = () => setLib(loadWorkoutLibrary());
 
@@ -78,18 +207,6 @@ export default function SavedWorkoutsScreen({
             Saved workouts
           </h1>
         </div>
-        {onOpenBuilder ? (
-          <button
-            type="button"
-            onClick={() => {
-              playSound(SOUNDS.uiSelect);
-              onOpenBuilder();
-            }}
-            className="arcade-btn-secondary px-4 py-2 rounded-lg text-xs font-display uppercase tracking-widest w-full sm:w-auto"
-          >
-            Build a workout
-          </button>
-        ) : null}
       </div>
 
       {entries.length === 0 ? (
@@ -116,37 +233,27 @@ export default function SavedWorkoutsScreen({
           {entries.map((entry) => (
             <li
               key={entry.id}
-              className="arcade-card rounded-xl p-4 border border-border/80 flex items-start justify-between gap-3"
+              className="arcade-card rounded-xl p-4 border border-border/80 flex flex-col gap-2 cursor-pointer"
+              onClick={() => {
+                playSound(SOUNDS.uiSelect);
+                setDetailEntry(entry);
+              }}
             >
+              <div className="flex items-start justify-between gap-3 min-w-0">
               <div className="min-w-0 flex-1">
                 <p className="font-display text-lg text-foreground truncate">
                   {entry.name}
                 </p>
                 <p className="text-xs text-muted-foreground font-sans mt-0.5">
-                  {new Date(entry.addedAtIso).toLocaleString()} ·{" "}
                   {entry.plan.options.mode} · {entry.plan.circuits.length}{" "}
                   circuits
-                </p>
-                <p className="text-xs text-muted-foreground/90 font-sans mt-1">
-                  {formatCircuitRoundsLine(entry)}
                 </p>
               </div>
               <div className="flex items-center gap-1 shrink-0">
                 <button
                   type="button"
-                  onClick={() => {
-                    playSound(SOUNDS.uiSelect);
-                    setRenameId(entry.id);
-                  }}
-                  className={iconBtnClass}
-                  title="Rename"
-                  aria-label="Rename workout"
-                >
-                  <Pencil size={18} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     playSound(SOUNDS.uiConfirm);
                     onReplay(entry);
                   }}
@@ -158,7 +265,21 @@ export default function SavedWorkoutsScreen({
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playSound(SOUNDS.uiSelect);
+                    setRenameId(entry.id);
+                  }}
+                  className={iconBtnClass}
+                  title="Rename"
+                  aria-label="Rename workout"
+                >
+                  <Pencil size={18} />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
                     playSound(SOUNDS.uiSelect);
                     setDeleteConfirmId(entry.id);
                   }}
@@ -169,6 +290,10 @@ export default function SavedWorkoutsScreen({
                   <Trash2 size={18} />
                 </button>
               </div>
+              </div>
+              <p className="text-xs text-muted-foreground font-sans text-right mt-auto pt-1">
+                {new Date(entry.addedAtIso).toLocaleString()}
+              </p>
             </li>
           ))}
         </ul>
@@ -230,6 +355,115 @@ export default function SavedWorkoutsScreen({
           setRenameId(null);
         }}
       />
+      {detailEntry ? (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Saved workout details"
+          onClick={() => setDetailEntry(null)}
+        >
+          <div
+            className="w-full max-w-xl max-h-[min(90dvh,42rem)] overflow-y-auto my-auto arcade-card rounded-xl border border-secondary/40 p-4 sm:p-5 shadow-[0_0_30px_hsl(var(--secondary)/0.2)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-xl font-display uppercase neon-text-secondary tracking-wide leading-tight">
+              {detailEntry.name}
+            </h2>
+            <p className="mt-1 text-xs text-muted-foreground font-sans">
+              Saved {new Date(detailEntry.addedAtIso).toLocaleString()}
+            </p>
+
+            <div className="relative mt-4 grid grid-cols-2 gap-3 text-xs font-sans">
+              <div
+                className="pointer-events-none absolute left-1/2 top-1/2 h-10 w-px -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-transparent via-border/90 to-transparent"
+                aria-hidden
+              />
+              <div className="space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-muted-foreground">Mode</p>
+                  <p className="text-right text-foreground">
+                    {detailEntry.plan.options.mode === "time-attack"
+                      ? "Time Attack"
+                      : "Rep Quest"}
+                  </p>
+                </div>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-muted-foreground">Est. Duration</p>
+                  <p className="text-right text-foreground">
+                    {formatDuration(detailEntry.plan.estimatedDurationSeconds)}
+                  </p>
+                </div>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-muted-foreground">Circuits</p>
+                  <p className="text-right text-foreground">
+                    {detailEntry.plan.circuits.length}
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-muted-foreground">Focus</p>
+                  <p className="text-right text-foreground">
+                    {detailEntry.plan.options.muscles.join(", ") || "Any"}
+                  </p>
+                </div>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-muted-foreground">Rest</p>
+                  <p className="text-right text-foreground whitespace-pre-line leading-tight">
+                    {detailEntry.plan.options.restBetweenExercises}s b/t Exercises{"\n"}
+                    {detailEntry.plan.options.restBetweenCircuits}s b/t Circuits
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-3">
+              {detailEntry.plan.circuits.map((circuit) => {
+                const exerciseNames = circuit.items
+                  .filter((item) => item.type === "exercise")
+                  .map((item) => item.exercise.exercise);
+
+                return (
+                  <div
+                    key={circuit.id}
+                    className="rounded-lg border border-border/60 bg-background/40 px-3 py-2"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-display text-xs uppercase tracking-widest text-accent">
+                        Circuit {circuit.circuitNumber}
+                      </p>
+                      <p className="font-display text-xs uppercase tracking-widest text-muted-foreground">
+                        x{circuit.loopCount ?? 1}
+                      </p>
+                    </div>
+                    <div className="mt-2 flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1.5 text-sm font-sans text-foreground leading-relaxed">
+                      {exerciseNames.length > 0 ? (
+                        exerciseNames.map((name, idx) => (
+                          <React.Fragment key={`${circuit.id}-${name}-${idx}`}>
+                            <span className="max-w-[7.25rem] rounded border border-secondary/30 bg-secondary/10 px-2 py-0.5 text-center whitespace-pre-line break-normal leading-tight">
+                              {formatExerciseChipLabel(name)}
+                            </span>
+                            {idx < exerciseNames.length - 1 ? (
+                              <ArrowRight
+                                size={11}
+                                className="mx-0 sm:mx-1 shrink-0 text-accent/80"
+                                aria-hidden
+                              />
+                            ) : null}
+                          </React.Fragment>
+                        ))
+                      ) : (
+                        <span className="text-muted-foreground">No exercises listed</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

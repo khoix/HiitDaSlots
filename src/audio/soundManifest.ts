@@ -13,6 +13,7 @@ function soundUrl(pathFromPublicRoot: string): string {
 }
 
 export const SOUNDS = {
+  mainMp3: soundUrl('sounds/main.mp3'),
   uiInsertCoin: soundUrl('sounds/ui/insert_coin.webm'),
   uiSelect: soundUrl('sounds/ui/select.webm'),
   uiConfirm: soundUrl('sounds/ui/confirm.webm'),
@@ -23,8 +24,27 @@ export const SOUNDS = {
   workoutCountdownTick: soundUrl('sounds/workout/countdown_tick.webm'),
 } as const;
 
+/** Looped in the session bar after INSERT COIN (hidden HTML audio element). */
+export const MAIN_LOOP_URL = SOUNDS.mainMp3;
+
+/**
+ * Workout shuffle playlist — add MP3s under `public/sounds/workout/` matching these names
+ * (e.g. worktrack01.mp3 … worktrack12.mp3), or edit this list.
+ */
+export const WORKOUT_TRACK_URLS: readonly string[] = [
+  soundUrl('sounds/workout/worktrack01.mp3'),
+  soundUrl('sounds/workout/worktrack02.mp3'),
+  soundUrl('sounds/workout/worktrack03.mp3'),
+  soundUrl('sounds/workout/worktrack04.mp3'),
+  soundUrl('sounds/workout/worktrack05.mp3'),
+  soundUrl('sounds/workout/worktrack06.mp3'),
+  soundUrl('sounds/workout/worktrack07.mp3'),
+  soundUrl('sounds/workout/worktrack08.mp3'),
+];
+
 /** All URLs prefetched on the landing screen (order does not matter). */
 export const PRECACHE_SOUND_URLS: readonly string[] = [
+  SOUNDS.mainMp3,
   SOUNDS.uiInsertCoin,
   SOUNDS.uiSelect,
   SOUNDS.uiConfirm,

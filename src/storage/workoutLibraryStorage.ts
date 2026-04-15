@@ -191,6 +191,14 @@ export function updateSavedWorkoutMetadata(
   saveWorkoutLibrary(lib);
 }
 
+export function updateSavedWorkoutPlan(id: string, plan: WorkoutPlan): void {
+  const lib = loadWorkoutLibrary();
+  lib.savedWorkouts = lib.savedWorkouts.map((entry) =>
+    entry.id === id ? { ...entry, plan: clonePlan(plan) } : entry
+  );
+  saveWorkoutLibrary(lib);
+}
+
 export function removeSavedWorkout(id: string): void {
   const lib = loadWorkoutLibrary();
   lib.savedWorkouts = lib.savedWorkouts.filter((s) => s.id !== id);

@@ -720,6 +720,23 @@
   }
 }
 
+/* ── Session media HUD marquee ─────────────────────────────────── */
+@keyframes session-marquee-shift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.session-marquee-rail {
+  animation-name: session-marquee-shift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.session-marquee-mask {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
 /* ── Scrollbar ──────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: hsl(var(--background)); }

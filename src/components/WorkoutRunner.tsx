@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { WorkoutPlan, WorkoutItem, ExerciseWorkoutItem, RestWorkoutItem } from '../types';
+import { useSessionMedia } from '@/context/SessionMediaContext';
 import { formatSeconds } from '../utils/timeUtils';
 import { openDemoLink, hasDemoLink } from '../utils/openDemo';
 import { Play, Pause, FastForward, CheckCircle, Trophy, ExternalLink, Star } from 'lucide-react';
@@ -9,11 +10,49 @@ import { playSound } from '../audio/playSfx';
 import { SOUNDS } from '../audio/soundManifest';
 import { Switch } from './ui/switch';
 import { Label } from './ui/label';
-import { isBilateralHold, isHoldExercise } from '../utils/repDifficulty';
-import { flattenPlanItemsForRunner } from '../utils/workoutGenerator';
+import { isBilateralHold, isBilateralRep, isHoldExercise } from '../utils/repDifficulty';
+import { flattenPlanItemsForRunner } from '../utils/workoutPlanRuntime';
 
 const AUTO_START_STORAGE_KEY = 'hiitdaslots-auto-start-interval';
 type BilateralPhase = 'first' | 'transition' | 'second' | null;
+
+/** Drives the session HUD workout bar (not music). */
+function computeWorkoutHudProgressPct(
+  flatLen: number,
+  currentIndex: number,
+  isDone: boolean,
+  currentItem: WorkoutItem | undefined,
+  timeLeft: number | null,
+  inTransition: boolean
+): number {
+  if (isDone) return 100;
+  if (flatLen <= 0) return 0;
+  const n = flatLen;
+  let base = (currentIndex / n) * 100;
+  const seg = 100 / n;
+
+  if (currentItem?.type === 'rest' && timeLeft !== null && currentItem.duration > 0) {
+    base += ((currentItem.duration - timeLeft) / currentItem.duration) * seg;
+  } else if (
+    currentItem?.type === 'exercise' &&
+    timeLeft !== null &&
+    !inTransition &&
+    currentItem.targetTime != null &&
+    currentItem.targetTime > 0
+  ) {
+    base += ((currentItem.targetTime - timeLeft) / currentItem.targetTime) * seg;
+  } else if (
+    currentItem?.type === 'exercise' &&
+    inTransition &&
+    timeLeft !== null
+  ) {
+    const td = 5;
+    const clamped = Math.min(td, Math.max(0, timeLeft));
+    base += ((td - clamped) / td) * seg;
+  }
+
+  return Math.min(100, Math.max(0, base));
+}
 
 interface Props {
   plan: WorkoutPlan;
@@ -22,6 +61,7 @@ interface Props {
 }
 
 export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
+  const { setWorkoutHudProgress } = useSessionMedia();
   const flatItems = useMemo(() => flattenPlanItemsForRunner(plan), [plan]);
   const firstExerciseIndex = flatItems.findIndex((item) => item.type === 'exercise');
 
@@ -55,6 +95,10 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
   }, [currentExercise, favoriteTick]);
   const currentIsHold = !!currentExercise && isHoldExercise(currentExercise);
   const currentIsBilateralHold = !!currentExercise && isBilateralHold(currentExercise);
+  const currentIsBilateralRep =
+    !!currentExercise &&
+    plan.options.mode === 'rep-quest' &&
+    isBilateralRep(currentExercise);
   const currentIsTimedExercise =
     isExerciseItem &&
     (plan.options.mode === 'time-attack' ||
@@ -84,7 +128,7 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
         setBilateralPhase(isBilateral ? 'first' : null);
         setIsRunning(shouldAutoStart);
       } else {
-        setBilateralPhase(null);
+        setBilateralPhase(currentIsBilateralRep ? 'first' : null);
         setTimeLeft(null);
         setIsRunning(false);
       }
@@ -93,7 +137,7 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
       setTimeLeft(null); // Rep quest exercise
       setIsRunning(false);
     }
-  }, [currentIndex, isDone, currentItem?.id]);
+  }, [currentIndex, isDone, currentItem?.id, currentIsBilateralRep]);
 
   useEffect(() => {
     hasPlayedFiveSecondTick.current = false;
@@ -175,6 +219,34 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
     return () => clearInterval(intervalId);
   }, [isRunning, currentIndex, currentItem?.id, bilateralPhase]);
 
+  const workoutHudPct = useMemo(
+    () =>
+      computeWorkoutHudProgressPct(
+        flatItems.length,
+        currentIndex,
+        isDone,
+        currentItem as WorkoutItem | undefined,
+        timeLeft,
+        inTransition
+      ),
+    [
+      flatItems.length,
+      currentIndex,
+      isDone,
+      currentItem,
+      timeLeft,
+      inTransition,
+    ]
+  );
+
+  useEffect(() => {
+    setWorkoutHudProgress(workoutHudPct);
+  }, [workoutHudPct, setWorkoutHudProgress]);
+
+  useEffect(() => {
+    return () => setWorkoutHudProgress(null);
+  }, [setWorkoutHudProgress]);
+
   const toggleTimer = () => {
     if (inTransition && timeLeft === null) {
       if (sideDuration === null) return;
@@ -184,6 +256,18 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
       return;
     }
     setIsRunning(!isRunning);
+  };
+
+  const handleRepDone = () => {
+    if (!isExerciseItem || currentIsTimedExercise || !currentIsBilateralRep) {
+      handleNext();
+      return;
+    }
+    if (bilateralPhase === 'first') {
+      setBilateralPhase('second');
+      return;
+    }
+    handleNext();
   };
 
   const persistAutoStart = (value: boolean) => {
@@ -214,7 +298,6 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
     );
   }
 
-  const progressPct = ((currentIndex) / flatItems.length) * 100;
   const showTimedControls = currentIsTimedExercise;
   const sideLabel =
     bilateralPhase === 'first'
@@ -225,15 +308,7 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
 
   return (
     <div className="flex flex-1 flex-col min-h-0 bg-background relative overflow-hidden">
-      {/* Progress Bar Top — below app header (h-14) */}
-      <div className="h-2 w-full bg-border fixed top-0 left-0 right-0 z-40">
-        <div 
-          className="h-full bg-primary shadow-[0_0_10px_hsl(var(--primary))] transition-all duration-500 ease-out"
-          style={{ width: `${progressPct}%` }}
-        />
-      </div>
-
-      <div className="flex flex-1 flex-col items-center justify-center p-4 md:pt-[4.75rem]">
+      <div className="flex flex-1 flex-col items-center justify-center p-4">
         <div className="text-muted-foreground text-sm uppercase tracking-widest font-bold mb-4">
           Circuit {currentItem.circuitNum} of {plan.circuits.length}
         </div>
@@ -332,8 +407,13 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
                 <div className="text-7xl font-display text-secondary neon-text-secondary mb-12">
                   {currentItem.targetReps}
                 </div>
+                {sideLabel && (
+                  <div className="text-sm font-display uppercase tracking-widest text-muted-foreground mb-6">
+                    {sideLabel}
+                  </div>
+                )}
                 
-                <button onClick={handleNext} className="arcade-btn-secondary px-10 py-5 rounded-xl text-2xl flex items-center gap-3">
+                <button onClick={handleRepDone} className="arcade-btn-secondary px-10 py-5 rounded-xl text-2xl flex items-center gap-3">
                   <CheckCircle size={28} /> DONE
                 </button>
               </div>
@@ -390,7 +470,7 @@ export default function WorkoutRunner({ plan, onFinish, onQuit }: Props) {
           playSound(SOUNDS.uiCancel);
           onQuit();
         }}
-        className="absolute top-4 right-4 sm:right-6 z-30 text-muted-foreground hover:text-destructive font-display uppercase tracking-widest text-xs"
+        className="absolute top-[calc(1rem+50px)] right-4 z-30 text-muted-foreground hover:text-destructive font-display uppercase tracking-widest text-xs sm:top-4 sm:right-6"
       >
         Quit
       </button>

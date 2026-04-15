@@ -60,6 +60,129 @@ function summarizeWorkout(entry: WorkoutHistoryEntry): string {
   return `${modeLabel} ${focus} (${exerciseCount} exercises)`;
 }
 
+function estimateLineWidth(text: string): number {
+  let width = 0;
+  for (const ch of text) {
+    if ("ilIjtfr".includes(ch)) {
+      width += 0.55;
+    } else if ("mwMW@#%&".includes(ch)) {
+      width += 1.35;
+    } else if (ch === " ") {
+      width += 0.35;
+    } else {
+      width += 1;
+    }
+  }
+  return width;
+}
+
+function buildLineLayouts(tokens: string[], lineCount: number): string[][] {
+  const results: string[][] = [];
+  if (lineCount <= 0 || lineCount > tokens.length) return results;
+
+  const split = (start: number, linesLeft: number, built: string[]) => {
+    if (linesLeft === 1) {
+      built.push(tokens.slice(start).join(" "));
+      results.push([...built]);
+      built.pop();
+      return;
+    }
+    const maxEnd = tokens.length - linesLeft;
+    for (let end = start; end <= maxEnd; end++) {
+      built.push(tokens.slice(start, end + 1).join(" "));
+      split(end + 1, linesLeft - 1, built);
+      built.pop();
+    }
+  };
+
+  split(0, lineCount, []);
+  return results;
+}
+
+function scoreLayout(lines: string[]): { maxWidth: number; variance: number } {
+  const widths = lines.map(estimateLineWidth);
+  const maxWidth = Math.max(...widths);
+  const minWidth = Math.min(...widths);
+  return { maxWidth, variance: maxWidth - minWidth };
+}
+
+function maybeCompactPairs(words: string[]): string[][] {
+  const out: string[][] = [words];
+  const compactable = new Set([
+    "knee drive",
+    "toe touch",
+    "high knee",
+    "side plank",
+  ]);
+  for (let i = 0; i < words.length - 1; i++) {
+    const key = `${words[i].toLowerCase()} ${words[i + 1].toLowerCase()}`;
+    if (!compactable.has(key)) continue;
+    const compacted = [
+      ...words.slice(0, i),
+      `${words[i]}${words[i + 1]}`,
+      ...words.slice(i + 2),
+    ];
+    out.push(compacted);
+  }
+  return out;
+}
+
+function formatExerciseChipLabel(name: string): string {
+  const trimmed = name.trim().replace(/\s+/g, " ");
+  const words = trimmed.split(" ").filter(Boolean);
+  if (words.length <= 1) return trimmed;
+  if (words.length === 2) return `${words[0]}\n${words[1]}`;
+
+  const variants = maybeCompactPairs(words);
+  let bestChoice: { lines: string[]; maxWidth: number; lineCount: number; variance: number } | null = null;
+
+  for (const tokens of variants) {
+    const twoLineLayouts = buildLineLayouts(tokens, 2);
+    for (const lines of twoLineLayouts) {
+      const score = scoreLayout(lines);
+      const candidate = {
+        lines,
+        maxWidth: score.maxWidth,
+        lineCount: 2,
+        variance: score.variance,
+      };
+      if (
+        !bestChoice ||
+        candidate.maxWidth < bestChoice.maxWidth ||
+        (candidate.maxWidth === bestChoice.maxWidth &&
+          (candidate.lineCount < bestChoice.lineCount ||
+            (candidate.lineCount === bestChoice.lineCount &&
+              candidate.variance < bestChoice.variance)))
+      ) {
+        bestChoice = candidate;
+      }
+    }
+
+    if (tokens.length >= 5) {
+      const threeLineLayouts = buildLineLayouts(tokens, 3);
+      for (const lines of threeLineLayouts) {
+        const score = scoreLayout(lines);
+        const candidate = {
+          lines,
+          maxWidth: score.maxWidth,
+          lineCount: 3,
+          variance: score.variance,
+        };
+        if (
+          !bestChoice ||
+          candidate.maxWidth + 0.9 < bestChoice.maxWidth ||
+          (candidate.maxWidth === bestChoice.maxWidth &&
+            candidate.lineCount < bestChoice.lineCount)
+        ) {
+          bestChoice = candidate;
+        }
+      }
+    }
+  }
+
+  return bestChoice ? bestChoice.lines.join("\n") : trimmed;
+}
+
 export default function WorkoutHistoryScreen({ onBack, onReplay }: Props) {
   const [lib, setLib] = useState(() => loadWorkoutLibrary());
   const [saveModalOpen, setSaveModalOpen] = useState(false);
@@ -131,14 +254,14 @@ export default function WorkoutHistoryScreen({ onBack, onReplay }: Props) {
                   <input
                     onClick={stopRowOpen}
                     className="min-w-0 flex-1 rounded border border-border bg-background/80 px-2 py-1 font-display text-foreground"
-                    value={(entry.title ?? "").trim() || summarizeWorkout(entry)}
+                    value={entry.title ?? ""}
                     onChange={(e) => {
                       updateHistoryMetadata(entry.id, {
                         title: e.target.value,
                       });
                       refresh();
                     }}
-                    placeholder="Title"
+                    placeholder={summarizeWorkout(entry)}
                   />
                   <div className="flex shrink-0 items-center justify-end gap-1">
                     <button
@@ -261,7 +384,13 @@ export default function WorkoutHistoryScreen({ onBack, onReplay }: Props) {
         open={saveModalOpen}
         title="Save as workout preset"
         hint="Saved presets appear under Saved workouts."
-        initialName={saveEntry ? (saveEntry.title ?? "").trim() || summarizeWorkout(saveEntry) : ""}
+        initialName={
+          saveEntry
+            ? (saveEntry.title ?? "").trim() === ""
+              ? summarizeWorkout(saveEntry)
+              : (saveEntry.title ?? "")
+            : ""
+        }
         onClose={() => {
           setSaveModalOpen(false);
           setSaveEntry(null);
@@ -291,34 +420,54 @@ export default function WorkoutHistoryScreen({ onBack, onReplay }: Props) {
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-xl font-display uppercase neon-text-primary tracking-wide leading-tight">
-              {(detailEntry.title ?? "").trim() || summarizeWorkout(detailEntry)}
+              {(detailEntry.title ?? "").trim() === ""
+                ? summarizeWorkout(detailEntry)
+                : (detailEntry.title ?? "")}
             </h2>
             <p className="mt-1 text-xs text-muted-foreground font-sans">
               {formatCompletedAt(detailEntry.completedAtIso)}
             </p>
 
-            <div className="mt-4 grid grid-cols-2 gap-2 text-xs font-sans">
-              <p className="text-muted-foreground">Mode</p>
-              <p className="text-right text-foreground">
-                {detailEntry.plan.options.mode === "time-attack" ? "Time Attack" : "Rep Quest"}
-              </p>
-              <p className="text-muted-foreground">Estimated Duration</p>
-              <p className="text-right text-foreground">
-                {formatDuration(detailEntry.plan.estimatedDurationSeconds)}
-              </p>
-              <p className="text-muted-foreground">Circuits</p>
-              <p className="text-right text-foreground">
-                {detailEntry.plan.circuits.length}
-              </p>
-              <p className="text-muted-foreground">Focus</p>
-              <p className="text-right text-foreground truncate">
-                {detailEntry.plan.options.muscles.join(", ") || "Any"}
-              </p>
-              <p className="text-muted-foreground">Rest</p>
-              <p className="text-right text-foreground whitespace-pre-line leading-tight">
-                {detailEntry.plan.options.restBetweenExercises}s b/t Exercises{"\n"}
-                {detailEntry.plan.options.restBetweenCircuits}s b/t Circuits
-              </p>
+            <div className="relative mt-4 grid grid-cols-2 gap-3 text-xs font-sans">
+              <div
+                className="pointer-events-none absolute left-1/2 top-1/2 h-10 w-px -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-transparent via-border/90 to-transparent"
+                aria-hidden
+              />
+              <div className="space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-muted-foreground">Mode</p>
+                  <p className="text-right text-foreground">
+                    {detailEntry.plan.options.mode === "time-attack" ? "Time Attack" : "Rep Quest"}
+                  </p>
+                </div>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-muted-foreground">Est. Duration</p>
+                  <p className="text-right text-foreground">
+                    {formatDuration(detailEntry.plan.estimatedDurationSeconds)}
+                  </p>
+                </div>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-muted-foreground">Circuits</p>
+                  <p className="text-right text-foreground">
+                    {detailEntry.plan.circuits.length}
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-muted-foreground">Focus</p>
+                  <p className="text-right text-foreground">
+                    {detailEntry.plan.options.muscles.join(", ") || "Any"}
+                  </p>
+                </div>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-muted-foreground">Rest</p>
+                  <p className="text-right text-foreground whitespace-pre-line leading-tight">
+                    {detailEntry.plan.options.restBetweenExercises}s b/t Exercises{"\n"}
+                    {detailEntry.plan.options.restBetweenCircuits}s b/t Circuits
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="mt-4 space-y-3">
@@ -340,17 +489,17 @@ export default function WorkoutHistoryScreen({ onBack, onReplay }: Props) {
                         x{circuit.loopCount ?? 1}
                       </p>
                     </div>
-                    <div className="mt-2 flex flex-wrap items-center gap-y-1.5 text-sm font-sans text-foreground leading-relaxed">
+                    <div className="mt-2 flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1.5 text-sm font-sans text-foreground leading-relaxed">
                       {exerciseNames.length > 0 ? (
                         exerciseNames.map((name, idx) => (
                           <React.Fragment key={`${circuit.id}-${name}-${idx}`}>
-                            <span className="max-w-[8.5rem] rounded border border-primary/25 bg-primary/5 px-2 py-0.5 text-center whitespace-normal break-words leading-tight">
-                              {name}
+                            <span className="max-w-[7.25rem] rounded border border-primary/25 bg-primary/5 px-2 py-0.5 text-center whitespace-pre-line break-normal leading-tight">
+                              {formatExerciseChipLabel(name)}
                             </span>
                             {idx < exerciseNames.length - 1 ? (
                               <ArrowRight
                                 size={11}
-                                className="mx-1 shrink-0 text-accent/80"
+                                className="mx-0 sm:mx-1 shrink-0 text-accent/80"
                                 aria-hidden
                               />
                             ) : null}

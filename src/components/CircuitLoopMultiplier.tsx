@@ -3,7 +3,7 @@ import { Repeat } from "lucide-react";
 import { cn } from "../lib/utils";
 import { playSound } from "../audio/playSfx";
 import { SOUNDS } from "../audio/soundManifest";
-import { clampLoopCount } from "../utils/workoutGenerator";
+import { clampLoopCount } from "../utils/workoutPlanRuntime";
 
 const VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 const ITEM_H = 30;

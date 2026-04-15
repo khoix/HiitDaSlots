@@ -1,5 +1,5 @@
 import type { Exercise } from "../types";
-import { ALL_EXERCISES } from "../utils/allExercises";
+import { getAllExercisesSync, loadAllExercises } from "../utils/allExercises";
 
 const STORAGE_KEY = "hiitdaslots-catalog-overrides-v1";
 
@@ -57,8 +57,9 @@ export function clearOverride(canonicalKey: string): void {
 }
 
 export function getResolvedExercises(): Exercise[] {
+  const allExercises = getAllExercisesSync();
   const overrides = loadOverrides();
-  return ALL_EXERCISES.map((base) => overrides[base.exercise] ?? base);
+  return allExercises.map((base) => overrides[base.exercise] ?? base);
 }
 
 export function buildExerciseByNameMap(
@@ -71,11 +72,16 @@ export function getResolvedCatalogRows(): {
   canonicalKey: string;
   exercise: Exercise;
 }[] {
+  const allExercises = getAllExercisesSync();
   const overrides = loadOverrides();
-  return ALL_EXERCISES.map((base) => ({
+  return allExercises.map((base) => ({
     canonicalKey: base.exercise,
     exercise: overrides[base.exercise] ?? base,
   }));
+}
+
+export async function ensureCatalogLoaded(): Promise<void> {
+  await loadAllExercises();
 }
 
 /** Another row (different canonical key) already uses this display name. */

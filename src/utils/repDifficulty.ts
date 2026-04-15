@@ -11,14 +11,15 @@ export function scaleTargetRepsForDifficulty(
   const t = Math.min(100, Math.max(0, difficultyPercent)) / 100;
   const trimmed = recommendedReps.trim();
 
-  const rangeMatch = trimmed.match(/^(\d+)\s*-\s*(\d+)(?:\s+(.*))?$/);
+  const rangeMatch = trimmed.match(/^(\d+)\s*-\s*(\d+)\s*(.*)$/);
   if (rangeMatch) {
     const low = parseInt(rangeMatch[1], 10);
     const high = parseInt(rangeMatch[2], 10);
     const suffix = (rangeMatch[3] || '').trim();
     const n = Math.round(low + (high - low) * t);
     const clamped = Math.min(high, Math.max(low, n));
-    return suffix ? `${clamped} ${suffix}` : String(clamped);
+    if (!suffix) return String(clamped);
+    return suffix.startsWith('/') ? `${clamped}${suffix}` : `${clamped} ${suffix}`;
   }
 
   if (/^\d+\s*$/.test(trimmed)) {
@@ -30,6 +31,11 @@ export function scaleTargetRepsForDifficulty(
 
 export function isHoldExercise(exercise: Exercise): boolean {
   return exercise.reps.trim().toLowerCase() === 'hold';
+}
+
+export function isBilateralRep(exercise: Exercise): boolean {
+  if (isHoldExercise(exercise)) return false;
+  return /\/side\b|per\s+side/i.test(exercise.reps);
 }
 
 export function isBilateralHold(exercise: Exercise): boolean {

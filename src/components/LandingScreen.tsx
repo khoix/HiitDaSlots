@@ -11,6 +11,7 @@ import {
   resumeAudioContext,
 } from '@/audio/playSfx';
 import { precacheSounds } from '@/audio/precacheSounds';
+import { useSessionMedia } from '@/context/SessionMediaContext';
 
 interface Props {
   onStart: () => void;
@@ -31,6 +32,7 @@ export default function LandingScreen({
   onOpenFavoriteExercises,
   onOpenWorkoutBuilder,
 }: Props) {
+  const { beginSessionAfterCoin } = useSessionMedia();
   const [precacheState, setPrecacheState] = useState<PrecacheState>('loading');
   const [completedCount, setCompletedCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -84,6 +86,7 @@ export default function LandingScreen({
   }, []);
 
   const handleInsertCoin = useCallback(() => {
+    beginSessionAfterCoin();
     void playSoundsTogether(INSERT_COIN_SOUND_URLS).catch(() => {
       INSERT_COIN_SOUND_URLS.forEach((url) => {
         const audio = new Audio(url);
@@ -91,7 +94,7 @@ export default function LandingScreen({
       });
     });
     onStart();
-  }, [onStart]);
+  }, [beginSessionAfterCoin, onStart]);
 
   const showProgress =
     precacheState === 'loading' || precacheState === 'error';

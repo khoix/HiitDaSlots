@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { Suspense, lazy, useCallback, useState } from "react";
 import {
   AppState,
   SetupOptions,
@@ -6,24 +6,34 @@ import {
   WorkoutHistoryEntry,
   SavedWorkoutEntry,
 } from "./types";
-import { generateWorkoutPlan } from "./utils/workoutGenerator";
+import {
+  generateWorkoutPlan,
+  reapplyPlanExerciseTargets,
+} from "./utils/workoutGenerator";
 import {
   appendHistoryFromPlan,
   resolveStrictExercisePool,
   setLastCompletedFromPlan,
 } from "./storage/workoutLibraryStorage";
 import { BgmMusicProvider } from "./context/BgmMusicContext";
-import DemoLaunchPage from "./components/DemoLaunchPage";
+import {
+  SessionMediaProvider,
+  SessionMediaWorkoutBridge,
+} from "./context/SessionMediaContext";
 import LandingScreen from "./components/LandingScreen";
 import SetupForm from "./components/SetupForm";
 import SlotReel from "./components/SlotReel";
 import WorkoutReadyScreen from "./components/WorkoutReadyScreen";
 import WorkoutRunner from "./components/WorkoutRunner";
-import WorkoutHistoryScreen from "./components/WorkoutHistoryScreen";
-import SavedWorkoutsScreen from "./components/SavedWorkoutsScreen";
-import FavoriteExercisesScreen from "./components/FavoriteExercisesScreen";
-import ExerciseCatalogScreen from "./components/ExerciseCatalogScreen";
-import WorkoutBuilderScreen from "./components/WorkoutBuilderScreen";
+
+const DemoLaunchPage = lazy(() => import("./components/DemoLaunchPage"));
+const WorkoutHistoryScreen = lazy(() => import("./components/WorkoutHistoryScreen"));
+const SavedWorkoutsScreen = lazy(() => import("./components/SavedWorkoutsScreen"));
+const FavoriteExercisesScreen = lazy(
+  () => import("./components/FavoriteExercisesScreen")
+);
+const ExerciseCatalogScreen = lazy(() => import("./components/ExerciseCatalogScreen"));
+const WorkoutBuilderScreen = lazy(() => import("./components/WorkoutBuilderScreen"));
 
 function buildPlanForOptions(options: SetupOptions): WorkoutPlan {
   const mode = options.exerciseSourceMode ?? "catalog";
@@ -38,12 +48,18 @@ function App() {
   const launcherDemoUrl = searchParams.get("demoUrl");
 
   if (isDemoLauncher) {
-    return <DemoLaunchPage demoUrl={launcherDemoUrl} />;
+    return (
+      <Suspense fallback={null}>
+        <DemoLaunchPage demoUrl={launcherDemoUrl} />
+      </Suspense>
+    );
   }
 
   const [appState, setAppState] = useState<AppState>("landing");
   const [setupOptions, setSetupOptions] = useState<SetupOptions | null>(null);
   const [workoutPlan, setWorkoutPlan] = useState<WorkoutPlan | null>(null);
+  const [activeSavedWorkoutId, setActiveSavedWorkoutId] = useState<string | null>(null);
+  const [activeSavedWorkoutName, setActiveSavedWorkoutName] = useState<string | null>(null);
   const [builderReturn, setBuilderReturn] = useState<"landing" | "savedWorkouts">(
     "landing"
   );
@@ -53,6 +69,8 @@ function App() {
       const plan = buildPlanForOptions(options);
       setSetupOptions(options);
       setWorkoutPlan(plan);
+      setActiveSavedWorkoutId(null);
+      setActiveSavedWorkoutName(null);
       setAppState("spinning");
     } catch (e) {
       alert(e instanceof Error ? e.message : "Could not generate workout.");
@@ -64,6 +82,8 @@ function App() {
     try {
       const plan = buildPlanForOptions(setupOptions);
       setWorkoutPlan(plan);
+      setActiveSavedWorkoutId(null);
+      setActiveSavedWorkoutName(null);
       setAppState("spinning");
     } catch (e) {
       alert(e instanceof Error ? e.message : "Could not regenerate workout.");
@@ -73,6 +93,8 @@ function App() {
   const handleStartOver = () => {
     setSetupOptions(null);
     setWorkoutPlan(null);
+    setActiveSavedWorkoutId(null);
+    setActiveSavedWorkoutName(null);
     setAppState("landing");
   };
 
@@ -85,26 +107,36 @@ function App() {
   }, [workoutPlan]);
 
   const replayFromHistory = (entry: WorkoutHistoryEntry) => {
+    const normalizedPlan = reapplyPlanExerciseTargets(entry.plan);
     setSetupOptions(entry.plan.options);
-    setWorkoutPlan(entry.plan);
+    setWorkoutPlan(normalizedPlan);
+    setActiveSavedWorkoutId(null);
+    setActiveSavedWorkoutName(null);
     setAppState("ready");
   };
 
   const replaySavedWorkout = (entry: SavedWorkoutEntry) => {
+    const normalizedPlan = reapplyPlanExerciseTargets(entry.plan);
     setSetupOptions(entry.plan.options);
-    setWorkoutPlan(entry.plan);
+    setWorkoutPlan(normalizedPlan);
+    setActiveSavedWorkoutId(entry.id);
+    setActiveSavedWorkoutName(entry.name);
     setAppState("ready");
   };
 
   const playPlanFromBuilder = (plan: WorkoutPlan) => {
     setSetupOptions(plan.options);
     setWorkoutPlan(plan);
+    setActiveSavedWorkoutId(null);
+    setActiveSavedWorkoutName(null);
     setAppState("ready");
   };
 
   return (
     <BgmMusicProvider>
-      <div className="min-h-screen w-full bg-background text-foreground overflow-x-hidden selection:bg-primary/30">
+      <SessionMediaProvider appState={appState}>
+        <SessionMediaWorkoutBridge workoutRunning={appState === "running"} />
+        <div className="min-h-screen w-full bg-background text-foreground overflow-x-hidden selection:bg-primary/30">
         <main className="flex min-h-screen w-full flex-col">
           {appState === "landing" && (
             <LandingScreen
@@ -128,36 +160,46 @@ function App() {
           )}
 
           {appState === "history" && (
-            <WorkoutHistoryScreen
-              onBack={() => setAppState("landing")}
-              onReplay={replayFromHistory}
-            />
+            <Suspense fallback={null}>
+              <WorkoutHistoryScreen
+                onBack={() => setAppState("landing")}
+                onReplay={replayFromHistory}
+              />
+            </Suspense>
           )}
 
           {appState === "savedWorkouts" && (
-            <SavedWorkoutsScreen
-              onBack={() => setAppState("landing")}
-              onReplay={replaySavedWorkout}
-              onOpenBuilder={() => {
-                setBuilderReturn("savedWorkouts");
-                setAppState("workoutBuilder");
-              }}
-            />
+            <Suspense fallback={null}>
+              <SavedWorkoutsScreen
+                onBack={() => setAppState("landing")}
+                onReplay={replaySavedWorkout}
+                onOpenBuilder={() => {
+                  setBuilderReturn("savedWorkouts");
+                  setAppState("workoutBuilder");
+                }}
+              />
+            </Suspense>
           )}
 
           {appState === "favoriteExercises" && (
-            <FavoriteExercisesScreen onBack={() => setAppState("landing")} />
+            <Suspense fallback={null}>
+              <FavoriteExercisesScreen onBack={() => setAppState("landing")} />
+            </Suspense>
           )}
 
           {appState === "exerciseCatalog" && (
-            <ExerciseCatalogScreen onBack={() => setAppState("landing")} />
+            <Suspense fallback={null}>
+              <ExerciseCatalogScreen onBack={() => setAppState("landing")} />
+            </Suspense>
           )}
 
           {appState === "workoutBuilder" && (
-            <WorkoutBuilderScreen
-              onBack={() => setAppState(builderReturn)}
-              onPlayPlan={playPlanFromBuilder}
-            />
+            <Suspense fallback={null}>
+              <WorkoutBuilderScreen
+                onBack={() => setAppState(builderReturn)}
+                onPlayPlan={playPlanFromBuilder}
+              />
+            </Suspense>
           )}
 
           {appState === "spinning" && workoutPlan && (
@@ -170,6 +212,12 @@ function App() {
           {appState === "ready" && workoutPlan && (
             <WorkoutReadyScreen
               plan={workoutPlan}
+              savedWorkoutId={activeSavedWorkoutId}
+              savedWorkoutName={activeSavedWorkoutName}
+              onSavedWorkoutLinked={(id) => {
+                setActiveSavedWorkoutId(id);
+                if (!id) setActiveSavedWorkoutName(null);
+              }}
               onStart={() => setAppState("running")}
               onRegenerate={handleRegenerate}
               onUpdatePlan={(p) => setWorkoutPlan(p)}
@@ -186,6 +234,7 @@ function App() {
           )}
         </main>
       </div>
+      </SessionMediaProvider>
     </BgmMusicProvider>
   );
 }

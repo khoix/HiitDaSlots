@@ -21,7 +21,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ArrowLeft, GripVertical, Layers, Play, Save, Trash2 } from "lucide-react";
+import { ArrowLeft, Clock, GripVertical, Layers, Play, Save, Trash2, Zap } from "lucide-react";
 import type { Exercise, WorkoutMode, WorkoutPlan } from "../types";
 import {
   buildWorkoutPlanFromCircuitLists,
@@ -702,126 +702,130 @@ export default function WorkoutBuilderScreen({ onBack, onPlayPlan }: Props) {
               <AddCircuitDropButton onClick={addCircuit} />
             </div>
 
-            <div className="arcade-card rounded-xl p-4 border border-border/80 shrink-0 space-y-4">
+            <div className="arcade-card relative rounded-xl p-4 border border-border/80 shrink-0 space-y-4">
               <h2 className="font-display text-sm uppercase tracking-widest text-muted-foreground">
                 Workout details
               </h2>
-              <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full">
-                <button
-                  type="button"
-                  onClick={() => {
-                    playSound(SOUNDS.uiSelect);
-                    setMode("time-attack");
-                  }}
-                  className={cn(
-                    "w-full sm:w-auto flex justify-center items-center px-3 py-2 rounded-lg text-xs font-display uppercase tracking-widest border text-center",
-                    mode === "time-attack"
-                      ? "border-primary bg-primary/15 text-primary"
-                      : "border-border text-muted-foreground"
-                  )}
-                >
-                  Time attack
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    playSound(SOUNDS.uiSelect);
-                    setMode("rep-quest");
-                  }}
-                  className={cn(
-                    "w-full sm:w-auto flex justify-center items-center px-3 py-2 rounded-lg text-xs font-display uppercase tracking-widest border text-center",
-                    mode === "rep-quest"
-                      ? "border-primary bg-primary/15 text-primary"
-                      : "border-border text-muted-foreground"
-                  )}
-                >
-                  Rep quest
-                </button>
-              </div>
-              <div className="space-y-5 max-w-md">
-                {mode === "time-attack" ? (
+              <div className="flex flex-col-reverse gap-3 sm:gap-4 sm:pr-[13rem]">
+                <div className="space-y-5 max-w-md flex-1">
+                  {mode === "time-attack" ? (
+                    <div>
+                      <label className="flex justify-between text-sm uppercase font-bold text-secondary mb-2">
+                        <span>Work interval (sec)</span>
+                        <span className="text-foreground tabular-nums">
+                          {workInterval}s
+                        </span>
+                      </label>
+                      <input
+                        type="range"
+                        min={20}
+                        max={90}
+                        step={5}
+                        value={workInterval}
+                        onChange={(e) =>
+                          setWorkInterval(parseInt(e.target.value, 10))
+                        }
+                        className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                  ) : null}
+                  {mode === "rep-quest" ? (
+                    <div>
+                      <label className="flex justify-between text-sm uppercase font-bold text-secondary mb-2">
+                        <span>Difficulty (target reps)</span>
+                        <span className="text-foreground tabular-nums">
+                          {repDifficultyLabel(repDifficulty)}
+                        </span>
+                      </label>
+                      <div className="flex justify-between text-xs text-muted-foreground uppercase tracking-wider mb-1">
+                        <span>Fewer reps</span>
+                        <span>More reps</span>
+                      </div>
+                      <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        step={5}
+                        value={repDifficulty}
+                        onChange={(e) =>
+                          setRepDifficulty(parseInt(e.target.value, 10))
+                        }
+                        className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer accent-secondary"
+                      />
+                    </div>
+                  ) : null}
                   <div>
                     <label className="flex justify-between text-sm uppercase font-bold text-secondary mb-2">
-                      <span>Work interval (sec)</span>
+                      <span>Rest between exercises (sec)</span>
                       <span className="text-foreground tabular-nums">
-                        {workInterval}s
+                        {restBetweenExercises}s
                       </span>
                     </label>
                     <input
                       type="range"
-                      min={20}
-                      max={90}
+                      min={0}
+                      max={60}
                       step={5}
-                      value={workInterval}
+                      value={restBetweenExercises}
                       onChange={(e) =>
-                        setWorkInterval(parseInt(e.target.value, 10))
+                        setRestBetweenExercises(parseInt(e.target.value, 10))
                       }
                       className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer"
                     />
                   </div>
-                ) : null}
-                {mode === "rep-quest" ? (
                   <div>
-                    <label className="flex justify-between text-sm uppercase font-bold text-secondary mb-2">
-                      <span>Difficulty (target reps)</span>
+                    <label className="flex justify-between text-sm uppercase font-bold text-accent mb-2">
+                      <span>Rest between circuits (sec)</span>
                       <span className="text-foreground tabular-nums">
-                        {repDifficultyLabel(repDifficulty)}
+                        {restBetweenCircuits}s
                       </span>
                     </label>
-                    <div className="flex justify-between text-xs text-muted-foreground uppercase tracking-wider mb-1">
-                      <span>Fewer reps</span>
-                      <span>More reps</span>
-                    </div>
                     <input
                       type="range"
-                      min={0}
-                      max={100}
-                      step={5}
-                      value={repDifficulty}
+                      min={30}
+                      max={180}
+                      step={15}
+                      value={restBetweenCircuits}
                       onChange={(e) =>
-                        setRepDifficulty(parseInt(e.target.value, 10))
+                        setRestBetweenCircuits(parseInt(e.target.value, 10))
                       }
-                      className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer accent-secondary"
+                      className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer"
                     />
                   </div>
-                ) : null}
-                <div>
-                  <label className="flex justify-between text-sm uppercase font-bold text-secondary mb-2">
-                    <span>Rest between exercises (sec)</span>
-                    <span className="text-foreground tabular-nums">
-                      {restBetweenExercises}s
-                    </span>
-                  </label>
-                  <input
-                    type="range"
-                    min={0}
-                    max={60}
-                    step={5}
-                    value={restBetweenExercises}
-                    onChange={(e) =>
-                      setRestBetweenExercises(parseInt(e.target.value, 10))
-                    }
-                    className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer"
-                  />
                 </div>
-                <div>
-                  <label className="flex justify-between text-sm uppercase font-bold text-accent mb-2">
-                    <span>Rest between circuits (sec)</span>
-                    <span className="text-foreground tabular-nums">
-                      {restBetweenCircuits}s
-                    </span>
-                  </label>
-                  <input
-                    type="range"
-                    min={30}
-                    max={180}
-                    step={15}
-                    value={restBetweenCircuits}
-                    onChange={(e) =>
-                      setRestBetweenCircuits(parseInt(e.target.value, 10))
-                    }
-                    className="w-full h-2 bg-input rounded-lg appearance-none cursor-pointer"
-                  />
+                <div className="flex flex-row sm:absolute sm:top-4 sm:bottom-4 sm:right-4 sm:min-w-[12rem] sm:flex-col sm:justify-stretch gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSound(SOUNDS.uiSelect);
+                      setMode("time-attack");
+                    }}
+                    className={cn(
+                      "flex-1 sm:w-full flex justify-center items-center gap-2 px-4 py-3 rounded-lg text-sm font-display uppercase tracking-widest border text-center",
+                      mode === "time-attack"
+                        ? "border-primary bg-primary/15 text-primary"
+                        : "border-border text-muted-foreground"
+                    )}
+                  >
+                    <Clock size={18} />
+                    <span>Time Attack</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSound(SOUNDS.uiSelect);
+                      setMode("rep-quest");
+                    }}
+                    className={cn(
+                      "flex-1 sm:w-full flex justify-center items-center gap-2 px-4 py-3 rounded-lg text-sm font-display uppercase tracking-widest border text-center",
+                      mode === "rep-quest"
+                        ? "border-primary bg-primary/15 text-primary"
+                        : "border-border text-muted-foreground"
+                    )}
+                  >
+                    <Zap size={18} />
+                    <span>Rep Request</span>
+                  </button>
                 </div>
               </div>
             </div>
