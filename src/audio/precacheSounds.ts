@@ -15,6 +15,10 @@ function assertNotAborted(signal?: AbortSignal): void {
   }
 }
 
+function isAbortError(error: unknown): boolean {
+  return error instanceof DOMException && error.name === 'AbortError';
+}
+
 function buildManifestSignature(urls: readonly string[]): string {
   return [...urls].sort().join('|');
 }
@@ -31,7 +35,7 @@ function writeStoredSignature(signature: string): void {
   try {
     localStorage.setItem(PRECACHE_SIGNATURE_KEY, signature);
   } catch {
-    // Ignore storage write failures (private mode, quota, etc).
+    // Precaching is best-effort; storage failures must never block the app.
   }
 }
 
@@ -50,6 +54,33 @@ async function fetchAndValidate(url: string, signal?: AbortSignal): Promise<Resp
   return res;
 }
 
+async function fetchBestEffort(
+  url: string,
+  signal: AbortSignal | undefined,
+  cache?: Cache
+): Promise<void> {
+  assertNotAborted(signal);
+
+  try {
+    const res = await fetchAndValidate(url, signal);
+
+    // CacheStorage explicitly disallows partial responses. A persistent 206 is
+    // still a usable network response, so simply leave it out of CacheStorage.
+    if (cache && res.status !== 206) {
+      try {
+        await cache.put(url, res.clone());
+      } catch {
+        // Cache writes are an optimization only.
+      }
+    }
+  } catch (error) {
+    if (isAbortError(error) || signal?.aborted) {
+      throw error;
+    }
+    // Network/cache failures are intentionally silent and non-blocking.
+  }
+}
+
 export async function precacheSounds({
   urls,
   signal,
@@ -62,8 +93,7 @@ export async function precacheSounds({
   if (typeof window === 'undefined' || !('caches' in window)) {
     await Promise.all(
       urls.map(async (url) => {
-        assertNotAborted(signal);
-        await fetchAndValidate(url, signal);
+        await fetchBestEffort(url, signal);
         onProgress?.(url, 'fetched');
       })
     );
@@ -72,7 +102,21 @@ export async function precacheSounds({
 
   const manifestSignature = buildManifestSignature(urls);
   const previousSignature = readStoredSignature();
-  const cache = await caches.open(PRECACHE_CACHE_NAME);
+
+  let cache: Cache;
+  try {
+    cache = await caches.open(PRECACHE_CACHE_NAME);
+  } catch {
+    // CacheStorage itself may be unavailable (private mode, quota, policy, etc.).
+    // Warm the browser HTTP cache where possible, then continue normally.
+    await Promise.all(
+      urls.map(async (url) => {
+        await fetchBestEffort(url, signal);
+        onProgress?.(url, 'fetched');
+      })
+    );
+    return;
+  }
 
   assertNotAborted(signal);
 
@@ -82,8 +126,12 @@ export async function precacheSounds({
     : (
         await Promise.all(
           urls.map(async (url) => {
-            const cached = await cache.match(url);
-            return cached ? null : url;
+            try {
+              const cached = await cache.match(url);
+              return cached ? null : url;
+            } catch {
+              return url;
+            }
           })
         )
       ).filter((url): url is string => url !== null);
@@ -95,16 +143,7 @@ export async function precacheSounds({
 
   await Promise.all(
     urlsToFetch.map(async (url) => {
-      assertNotAborted(signal);
-      const res = await fetchAndValidate(url, signal);
-
-      // CacheStorage explicitly disallows partial responses. If the origin still
-      // returns 206 after the reload, treat the fetch as successful but leave it
-      // out of CacheStorage; the next visit will retry because cache.match misses.
-      if (res.status !== 206) {
-        await cache.put(url, res.clone());
-      }
-
+      await fetchBestEffort(url, signal, cache);
       onProgress?.(url, 'fetched');
     })
   );
