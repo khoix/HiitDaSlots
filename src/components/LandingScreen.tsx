@@ -22,7 +22,7 @@ interface Props {
   onOpenWorkoutBuilder?: () => void;
 }
 
-type PrecacheState = 'loading' | 'success' | 'error';
+type PrecacheState = 'loading' | 'success';
 
 export default function LandingScreen({
   onStart,
@@ -35,8 +35,6 @@ export default function LandingScreen({
   const { beginSessionAfterCoin } = useSessionMedia();
   const [precacheState, setPrecacheState] = useState<PrecacheState>('loading');
   const [completedCount, setCompletedCount] = useState(0);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [retryKey, setRetryKey] = useState(0);
 
   const total = PRECACHE_SOUND_URLS.length;
   const progressPct =
@@ -56,7 +54,6 @@ export default function LandingScreen({
 
     setPrecacheState('loading');
     setCompletedCount(0);
-    setErrorMessage(null);
 
     (async () => {
       try {
@@ -67,22 +64,16 @@ export default function LandingScreen({
             setCompletedCount((c) => c + 1);
           },
         });
+      } catch {
+        // Precaching is an optimization only. Never block the app if it fails.
+      }
+
+      if (!signal.aborted) {
         setPrecacheState('success');
-      } catch (e) {
-        if (signal.aborted) return;
-        setCompletedCount(0);
-        setPrecacheState('error');
-        setErrorMessage(
-          e instanceof Error ? e.message : 'Could not load game sounds.'
-        );
       }
     })();
 
     return () => ac.abort();
-  }, [retryKey]);
-
-  const handleRetry = useCallback(() => {
-    setRetryKey((k) => k + 1);
   }, []);
 
   const handleInsertCoin = useCallback(() => {
@@ -96,8 +87,7 @@ export default function LandingScreen({
     onStart();
   }, [beginSessionAfterCoin, onStart]);
 
-  const showProgress =
-    precacheState === 'loading' || precacheState === 'error';
+  const showProgress = precacheState === 'loading';
   const ctaReady = precacheState === 'success';
 
   return (
@@ -137,46 +127,25 @@ export default function LandingScreen({
           <div className="landing-title-underline relative z-10" />
 
           {showProgress && (
-          <div className="mt-5 space-y-2">
-            <div
-              className="h-2 w-full overflow-hidden rounded-full border border-primary/30 bg-black/40 shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]"
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={total}
-              aria-valuenow={precacheState === 'error' ? 0 : completedCount}
-              aria-label="Loading sounds"
-            >
+            <div className="mt-5 space-y-2">
               <div
-                className="h-full rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary)/0.7)] transition-[width] duration-300 ease-out"
-                style={{
-                  width:
-                    precacheState === 'error'
-                      ? '0%'
-                      : `${progressPct}%`,
-                }}
-              />
-            </div>
-            {precacheState === 'loading' && (
+                className="h-2 w-full overflow-hidden rounded-full border border-primary/30 bg-black/40 shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]"
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={total}
+                aria-valuenow={completedCount}
+                aria-label="Loading sounds"
+              >
+                <div
+                  className="h-full rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary)/0.7)] transition-[width] duration-300 ease-out"
+                  style={{ width: `${progressPct}%` }}
+                />
+              </div>
               <p className="font-display text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">
                 Loading assets… {completedCount}/{total}
               </p>
-            )}
-            {precacheState === 'error' && errorMessage && (
-              <div className="space-y-3">
-                <p className="text-sm text-destructive font-sans">
-                  {errorMessage}
-                </p>
-                <button
-                  type="button"
-                  onClick={handleRetry}
-                  className="arcade-btn-secondary px-6 py-2 rounded-lg text-sm font-display uppercase tracking-widest"
-                >
-                  Retry
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+            </div>
+          )}
         </div>
       </div>
 
