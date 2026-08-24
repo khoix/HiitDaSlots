@@ -36,7 +36,14 @@ function writeStoredSignature(signature: string): void {
 }
 
 async function fetchAndValidate(url: string, signal?: AbortSignal): Promise<Response> {
-  const res = await fetch(url, { signal });
+  let res = await fetch(url, { signal });
+
+  // Media requests can leave a partial (206) response in the browser HTTP cache.
+  // CacheStorage rejects 206 responses, so retry once while bypassing that cache.
+  if (res.status === 206) {
+    res = await fetch(url, { signal, cache: 'reload' });
+  }
+
   if (!res.ok) {
     throw new Error(`Failed to load ${url} (${res.status})`);
   }
@@ -90,7 +97,14 @@ export async function precacheSounds({
     urlsToFetch.map(async (url) => {
       assertNotAborted(signal);
       const res = await fetchAndValidate(url, signal);
-      await cache.put(url, res.clone());
+
+      // CacheStorage explicitly disallows partial responses. If the origin still
+      // returns 206 after the reload, treat the fetch as successful but leave it
+      // out of CacheStorage; the next visit will retry because cache.match misses.
+      if (res.status !== 206) {
+        await cache.put(url, res.clone());
+      }
+
       onProgress?.(url, 'fetched');
     })
   );
