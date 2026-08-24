@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ExerciseWorkoutItem, WorkoutPlan } from '../types';
 import { formatSeconds } from '../utils/timeUtils';
 import { openDemoLink, hasDemoLink } from '../utils/openDemo';
@@ -17,6 +17,7 @@ import { SOUNDS } from '../audio/soundManifest';
 import { isBilateralHold, isHoldExercise } from '../utils/repDifficulty';
 import CircuitLoopMultiplier from './CircuitLoopMultiplier';
 import { clampLoopCount, recalculatePlanDuration } from '../utils/workoutPlanRuntime';
+import { useSessionMedia } from '@/context/SessionMediaContext';
 
 interface Props {
   plan: WorkoutPlan;
@@ -39,10 +40,16 @@ export default function WorkoutReadyScreen({
   onUpdatePlan,
   onStartOver,
 }: Props) {
+  const { ensureSessionArmed } = useSessionMedia();
   const [isEditing, setIsEditing] = useState(false);
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState<ExerciseWorkoutItem | null>(null);
   const [favoriteTick, setFavoriteTick] = useState(0);
+
+  useEffect(() => {
+    ensureSessionArmed();
+  }, [ensureSessionArmed]);
+
   const selectedIsFavorite = React.useMemo(
     () => (selectedExercise ? isFavoriteExercise(selectedExercise.exercise.exercise) : false),
     [selectedExercise, favoriteTick]
