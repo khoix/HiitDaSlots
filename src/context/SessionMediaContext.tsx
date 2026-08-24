@@ -77,6 +77,8 @@ function MarqueeTitle({
 
 type Ctx = {
   beginSessionAfterCoin: () => void;
+  /** Idempotent: show session HUD and start main loop if not already armed. */
+  ensureSessionArmed: () => void;
   setWorkoutMusicActive: (active: boolean) => void;
   /** 0–100 while the workout runner is mounted; `null` clears the HUD workout bar. */
   setWorkoutHudProgress: (pct: number | null) => void;
@@ -104,6 +106,7 @@ export function SessionMediaProvider({
   const mainMediaSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
 
   const [barVisible, setBarVisible] = useState(false);
+  const barVisibleRef = useRef(false);
   const [mainAutoplayKick, setMainAutoplayKick] = useState(0);
   const [workoutActive, setWorkoutActive] = useState(false);
   const [userPaused, setUserPaused] = useState(false);
@@ -159,6 +162,10 @@ export function SessionMediaProvider({
       return false;
     }
   }, []);
+
+  useEffect(() => {
+    barVisibleRef.current = barVisible;
+  }, [barVisible]);
 
   useEffect(() => {
     if (!barVisible) setHudDockOpen(false);
@@ -361,14 +368,19 @@ export function SessionMediaProvider({
     }
   }, []);
 
-  const beginSessionAfterCoin = useCallback(() => {
+  const ensureSessionArmed = useCallback(() => {
+    if (barVisibleRef.current) return;
     pendingMainFadeInRef.current = true;
     setBarVisible(true);
     setUserPaused(false);
+    setMainAutoplayKick((k) => k + 1);
+  }, []);
+
+  const beginSessionAfterCoin = useCallback(() => {
+    ensureSessionArmed();
     setWorkoutActive(false);
     stopWorkoutAudio();
-    setMainAutoplayKick((k) => k + 1);
-  }, [stopWorkoutAudio]);
+  }, [ensureSessionArmed, stopWorkoutAudio]);
 
   const setWorkoutMusicActive = useCallback(
     (active: boolean) => {
@@ -470,10 +482,11 @@ export function SessionMediaProvider({
   const value = useMemo(
     () => ({
       beginSessionAfterCoin,
+      ensureSessionArmed,
       setWorkoutMusicActive,
       setWorkoutHudProgress,
     }),
-    [beginSessionAfterCoin, setWorkoutMusicActive, setWorkoutHudProgress]
+    [beginSessionAfterCoin, ensureSessionArmed, setWorkoutMusicActive, setWorkoutHudProgress]
   );
 
   const iconBtn =
@@ -559,45 +572,40 @@ export function SessionMediaProvider({
 
   return (
     <SessionMediaContext.Provider value={value}>
-      {barVisible ? (
-        <>
-          {showMobileTopBar ? (
-            <div
-              ref={hudShellRef}
-              className={cn(
-                'fixed top-0 left-0 right-0 z-[200] flex flex-col border-b border-border/40',
-                'bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70'
-              )}
-              role="region"
-              aria-label="Session audio"
-            >
-              {controlsRowEl(
-                'w-52 max-w-[min(52vw,13.5rem)] sm:w-56 sm:max-w-[15rem]'
-              )}
-              {progressBarEl}
-            </div>
-          ) : null}
-
-          <audio
-            ref={mainRef}
-            src={MAIN_LOOP_URL}
-            className="pointer-events-none fixed left-[-9999px] top-0 h-px w-px overflow-hidden opacity-0"
-            loop
-            preload="auto"
-            aria-hidden
-            onPlay={() => {
-              if (workoutActive && hasTracks) mainRef.current?.pause();
-            }}
-          />
-          <audio
-            ref={workoutRef}
-            className="pointer-events-none fixed left-[-9999px] top-0 h-px w-px overflow-hidden opacity-0"
-            preload="none"
-            onEnded={onWorkoutEnded}
-            onError={onWorkoutError}
-          />
-        </>
+      {barVisible && showMobileTopBar ? (
+        <div
+          ref={hudShellRef}
+          className={cn(
+            'fixed top-0 left-0 right-0 z-[200] flex flex-col border-b border-border/40',
+            'bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70'
+          )}
+          role="region"
+          aria-label="Session audio"
+        >
+          {controlsRowEl(
+            'w-52 max-w-[min(52vw,13.5rem)] sm:w-56 sm:max-w-[15rem]'
+          )}
+          {progressBarEl}
+        </div>
       ) : null}
+      <audio
+        ref={mainRef}
+        src={MAIN_LOOP_URL}
+        className="pointer-events-none fixed left-[-9999px] top-0 h-px w-px overflow-hidden opacity-0"
+        loop
+        preload="auto"
+        aria-hidden
+        onPlay={() => {
+          if (workoutActive && hasTracks) mainRef.current?.pause();
+        }}
+      />
+      <audio
+        ref={workoutRef}
+        className="pointer-events-none fixed left-[-9999px] top-0 h-px w-px overflow-hidden opacity-0"
+        preload="none"
+        onEnded={onWorkoutEnded}
+        onError={onWorkoutError}
+      />
       {showDesktopPlayerDock ? (
         <div
           className={cn(
@@ -689,9 +697,12 @@ export function SessionMediaWorkoutBridge({
 }: {
   workoutRunning: boolean;
 }) {
-  const { setWorkoutMusicActive } = useSessionMedia();
+  const { ensureSessionArmed, setWorkoutMusicActive } = useSessionMedia();
   useEffect(() => {
+    if (workoutRunning) {
+      ensureSessionArmed();
+    }
     setWorkoutMusicActive(workoutRunning);
-  }, [workoutRunning, setWorkoutMusicActive]);
+  }, [workoutRunning, ensureSessionArmed, setWorkoutMusicActive]);
   return null;
 }
